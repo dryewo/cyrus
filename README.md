@@ -5,12 +5,12 @@ Includes:
 * [mount](https://github.com/tolitius/mount)
 * dev/user.clj
 * [timbre](https://github.com/ptaoussanis/timbre)
+* +http: [aleph](https://github.com/ztellman/aleph)
 * useful tweaks
     
 Roadmap:
 
 * +db (PostgreSQL, HikariCP, Flyway, HugSQL)
-* +http server
 * +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API)
 * +nrepl
 

@@ -6,7 +6,10 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.fzakaria/slf4j-timbre "0.3.7"]
-                 [mount "0.1.11"]]
+                 [mount "0.1.11"]{{#http}}
+                 [aleph "0.4.3"]
+                 [compojure "1.6.0"]
+                 [ring/ring-defaults "0.3.1"]{{/http}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"

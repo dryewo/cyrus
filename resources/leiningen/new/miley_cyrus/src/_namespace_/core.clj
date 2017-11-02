@@ -1,6 +1,7 @@
 (ns {{namespace}}.core
   (:require [mount.core :as mount]
-            [{{namespace}}.lib.logging :as log])
+            [{{namespace}}.lib.logging :as log]{{#http}}
+            [{{namespace}}.http]{{/http}})
   (:gen-class))
 
 (defn implementation-version []
@@ -27,3 +28,7 @@
    :all              :info})
 
 (log/set-default-output-fn!)
+
+(comment
+  (mount/start)
+  (mount/stop))
