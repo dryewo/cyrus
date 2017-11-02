@@ -3,7 +3,8 @@
                                              ->files sanitize-ns name-to-path
                                              multi-segment sanitize]]
             [leiningen.core.main :as main]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [leiningen.new.ga :as ga]))
 
 (defn prefix [name]
   (->> (str/split name #"(-|_)")
@@ -28,6 +29,10 @@
         render (renderer "miley_cyrus")]
     (main/debug "Template data:" data)
     (main/info "Generating a project called" project-name "based on the 'miley-cyrus' template.")
+    (when-not (System/getenv "MILEY_CYRUS_TEST")
+      (ga/hit (ga/make-payload {:t  "event"
+                                :an "miley-cyrus"
+                                :el "leinnew"})))
     [data
      ["project.clj" (render "project.clj" data)]
      ["README.md" (render "README.md" data)]

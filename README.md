@@ -2,15 +2,16 @@
 
 Includes:
 
-* [mount]()
+* [mount](https://github.com/tolitius/mount)
 * dev/user.clj
-* [timbre]()
+* [timbre](https://github.com/ptaoussanis/timbre)
 * useful tweaks
     
 Roadmap:
 
 * +db (PostgreSQL, HikariCP, Flyway, HugSQL)
-* +[swagger1st]() (RESTful API)
+* +http server
+* +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API)
 * +nrepl
 
 ## Usage
