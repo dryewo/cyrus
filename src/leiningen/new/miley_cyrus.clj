@@ -40,7 +40,6 @@
      [".gitignore" (render "_gitignore" data)]
      ["dev/user.clj" (render "dev/user.clj" data)]
      ["src/{{nested-dirs}}/core.clj" (render "src/_namespace_/core.clj" data)]
-     ["src/{{nested-dirs}}/logging.clj" (render "src/_namespace_/logging.clj" data)]
      ["src/{{nested-dirs}}/lib/logging.clj" (render "src/_namespace_/lib/logging.clj" data)]
      ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
      "resources"]))

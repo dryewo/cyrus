@@ -1,7 +1,6 @@
 (ns {{namespace}}.core
   (:require [mount.core :as mount]
-            [{{namespace}}.lib.logging :as log]
-            [{{namespace}}.logging])
+            [{{namespace}}.lib.logging :as log])
   (:gen-class))
 
 (defn implementation-version []
@@ -27,4 +26,4 @@
   {"{{namespace}}.*" :debug
    :all              :info})
 
-({{namespace}}.logging/set-default-output-fn!)
+(log/set-default-output-fn!)
