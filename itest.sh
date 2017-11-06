@@ -12,20 +12,21 @@ cd target
 
 export MILEY_CYRUS_TEST=1
 
-DEBUG=1 lein new miley-cyrus com.example/foo-bar1
-pushd foo-bar1
-    lein test
-    lein uberjar
-    lein ancient
-popd
+run-test() {
+    DEBUG=1 lein new miley-cyrus "$@"
+    local project_dir=${1##*/}
+    pushd "$project_dir"
+        lein test
+        lein uberjar
+        lein ancient
+    popd
+}
 
-DEBUG=1 lein new miley-cyrus com.example/foo-bar2 +http
-pushd foo-bar2
-    lein test
-    lein uberjar
-    lein ancient
-popd
+run-test org.example/foo-bar1
+run-test org.example/foo-bar2 +http
+run-test org.example/foo-bar3 +db
+run-test org.example/foo-bar4 +http +db
 
 # Just in case we want to try it outside of target/
 lein install
-echo "Use:   MILEY_CYRUS_TEST=1 lein new miley-cyrus org.example.footeam/bar-project +http --snapshot"
+echo "Use:   MILEY_CYRUS_TEST=1 lein new miley-cyrus org.example.footeam/bar-project +http +db --snapshot"

@@ -7,9 +7,14 @@
                  [com.taoensso/timbre "4.10.0"]
                  [com.fzakaria/slf4j-timbre "0.3.7"]
                  [mount "0.1.11"]{{#http}}
-                 [aleph "0.4.3"]
+                 [aleph "0.4.4"]
                  [compojure "1.6.0"]
-                 [ring/ring-defaults "0.3.1"]{{/http}}]
+                 [ring/ring-defaults "0.3.1"]{{/http}}{{#db}}
+                 [conman "0.7.1"]
+                 [org.postgresql/postgresql "42.1.4"]
+                 [cheshire "5.8.0"]
+                 [camel-snake-kebab "0.4.0"]
+                 [migratus "1.0.0"]{{/db}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"

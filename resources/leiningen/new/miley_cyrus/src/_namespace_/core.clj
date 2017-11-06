@@ -1,7 +1,8 @@
 (ns {{namespace}}.core
   (:require [mount.core :as mount]
             [{{namespace}}.lib.logging :as log]{{#http}}
-            [{{namespace}}.http]{{/http}})
+            [{{namespace}}.http]{{/http}}{{#db}}
+            [{{namespace}}.db]{{/db}})
   (:gen-class))
 
 (defn implementation-version []
@@ -30,5 +31,6 @@
 (log/set-default-output-fn!)
 
 (comment
+  ;; Starting and stopping the application during development
   (mount/start)
   (mount/stop))
