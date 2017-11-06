@@ -11,6 +11,9 @@
 (defn stop []
   (mount/stop))
 
+(defn start []
+  (mount/start))
+
 (defn reset []
   (mount/stop)
   (refresh :after 'mount/start))

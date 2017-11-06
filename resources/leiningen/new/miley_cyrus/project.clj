@@ -9,7 +9,8 @@
                  [mount "0.1.11"]{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
-                 [ring/ring-defaults "0.3.1"]{{/http}}{{#db}}
+                 [ring/ring-defaults "0.3.1"]
+                 [ring/ring-json "0.4.0"]{{/http}}{{#db}}
                  [conman "0.7.1"]
                  [org.postgresql/postgresql "42.1.4"]
                  [cheshire "5.8.0"]
