@@ -6,18 +6,19 @@ Includes:
 * dev/user.clj
 * [timbre](https://github.com/ptaoussanis/timbre)
 * +http: [aleph](https://github.com/ztellman/aleph)
+* +db: PostgreSQL, [conman](https://github.com/luminus-framework/conman), [migratus](https://github.com/yogthos/migratus), [HugSQL](https://www.hugsql.org/)
 * useful tweaks
-    
+
 Roadmap:
 
-* +db (PostgreSQL, HikariCP, Flyway, HugSQL)
+* Lean config management
 * +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API)
 * +nrepl
 
 ## Usage
 
 ```
-$ lein new miley-cyrus org.example.footeam/bar-project
+$ lein new miley-cyrus org.example.footeam/bar-project +http +db
 ```
 
 ## Development
