@@ -14,7 +14,7 @@
        (apply str)))
 
 (defn timestamp []
-  (.format (SimpleDateFormat. "yyyyMMddHHmmss ") (Date.)))
+  (.format (SimpleDateFormat. "yyyyMMddHHmmss") (Date.)))
 
 (defn prepare-data
   ([name]
