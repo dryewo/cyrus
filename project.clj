@@ -12,7 +12,6 @@
                   ["vcs" "commit"]
                   ["vcs" "tag"]
                   ["deploy"]
-                  ["vcs" "commit"]
                   ["vcs" "push"]]
   :vcs :git
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.8.0"]
