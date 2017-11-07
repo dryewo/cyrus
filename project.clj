@@ -1,4 +1,4 @@
-(defproject miley-cyrus/lein-template "0.5.1"
+(defproject miley-cyrus/lein-template "0.5.2"
   :description "A very opinionated Clojure project template."
   :url "https://github.com/dryewo/miley-cyrus"
   :license {:name "Apache License"
