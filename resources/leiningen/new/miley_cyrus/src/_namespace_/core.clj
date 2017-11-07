@@ -10,7 +10,7 @@
     ;; When running in a REPL
     (System/getProperty "{{name}}.version")
     ;; When running as `java -jar ...`
-    (-> (eval '{{namespace}}.core) .getPackage .getImplementationVersion)))
+    (-> (eval '{{package}}.core) .getPackage .getImplementationVersion)))
 
 (defn -main [& args]
   (log/disable-console-logging-colors)
