@@ -1,4 +1,4 @@
-(defproject miley-cyrus/lein-template "0.5.1-SNAPSHOT"
+(defproject miley-cyrus/lein-template "0.5.0"
   :description "A very opinionated Clojure project template."
   :url "https://github.com/dryewo/miley-cyrus"
   :license {:name "Apache License"
@@ -7,11 +7,11 @@
   :deploy-repositories [["releases" :clojars]]
   :plugins [[lein-shell "0.5.0"]]
   :release-tasks [["shell" "git" "diff" "--exit-code"]
+                  ["change" "version" "leiningen.release/bump-version"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
-                  ["vcs" "tag" "template-"]
+                  ["vcs" "tag"]
                   ["deploy"]
-                  ["change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
                   ["vcs" "push"]]
   :vcs :git
