@@ -20,6 +20,8 @@
   (try
     (mount/start)
     (log/debug "Started")
+    ;; Prevent -main from exiting to keep the application running
+    @(promise)
     (catch Exception e
       (log/error e "Could not start the application because of %s." (str e))
       (System/exit 1))))
