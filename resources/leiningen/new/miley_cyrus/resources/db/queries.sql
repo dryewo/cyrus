@@ -6,6 +6,7 @@ VALUES (:id, :memory-text)
 
 -- :name get-memory :? :1
 -- :doc retrieves a memory record given the id
+-- fields will be converted from camel_case to kebab-case
 SELECT * FROM memories
 WHERE id = :id
 

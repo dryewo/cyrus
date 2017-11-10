@@ -68,8 +68,8 @@
          ["test/{{nested-dirs}}/db_test.clj" (render "test/_namespace_/db_test.clj" data)]
          ["make.sh" (render "make.sh" data) :executable true]
          ["resources/db/queries.sql" (render "resources/db/queries.sql" data)]
-         ["resources/db/migrations/{{now-ts}}-add-memories-table.up.sql" (render "resources/db/migrations/_timestamp_-add-memories-table.up.sql" data)]
-         ["resources/db/migrations/{{now-ts}}-add-memories-table.down.sql" (render "resources/db/migrations/_timestamp_-add-memories-table.down.sql" data)]]))))
+         ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
+         ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
 (def supported-features #{"+http" "+db"})
 

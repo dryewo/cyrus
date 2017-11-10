@@ -10,7 +10,8 @@
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
                  [ring/ring-defaults "0.3.1"]
-                 [ring/ring-json "0.4.0"]{{/http}}{{#db}}
+                 [ring/ring-json "0.4.0"]
+                 [clj-http "3.7.0"]{{/http}}{{#db}}
                  [conman "0.7.1"]
                  [org.postgresql/postgresql "42.1.4"]
                  [cheshire "5.8.0"]
@@ -27,5 +28,4 @@
                        :source-paths   ["dev"]
                        :resource-paths ["test/resources"]
                        :dependencies   [[org.clojure/tools.namespace "0.2.11"]
-                                        [org.clojure/java.classpath "0.2.3"]
-                                        [midje "1.8.3" :exclusions [clj-time]]]}})
+                                        [org.clojure/java.classpath "0.2.3"]]}})
