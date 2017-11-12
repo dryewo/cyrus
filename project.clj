@@ -14,7 +14,8 @@
                   ["deploy"]
                   ["vcs" "push"]]
   :vcs :git
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.8.0"]
+  :profiles {:dev {:plugins      [[lein-ancient "0.6.14"]]
+                   :dependencies [[org.clojure/clojure "1.8.0"]
                                   [org.clojure/tools.namespace "0.2.11"]
                                   [org.clojure/java.classpath "0.2.3"]
                                   [midje "1.8.3"]]}})

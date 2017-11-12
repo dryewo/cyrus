@@ -1,5 +1,8 @@
 # A very opinionated Clojure project template
 
+[![Build Status](https://travis-ci.org/dryewo/miley-cyrus.svg?branch=master)](https://travis-ci.org/dryewo/miley-cyrus)
+[![Clojars Project](https://img.shields.io/clojars/v/miley-cyrus/lein-template.svg)](https://clojars.org/miley-cyrus/lein-template)
+
 Includes:
 
 * [mount](https://github.com/tolitius/mount)

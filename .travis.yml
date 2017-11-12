@@ -1,0 +1,4 @@
+language: clojure
+services:
+- postgresql
+script: ./itest.sh
