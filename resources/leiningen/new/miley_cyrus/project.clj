@@ -25,7 +25,8 @@
   :uberjar-name "{{name}}.jar"
   :manifest {"Implementation-Version" ~#(:version %)}
   :plugins [[lein-cloverage "1.0.9"]
-            [lein-set-version "0.4.1"]]
+            [lein-set-version "0.4.1"]
+            [lein-ancient "0.6.14"]]
   :profiles {:uberjar {:aot :all}
              :dev     {:repl-options   {:init-ns user}
                        :source-paths   ["dev"]
