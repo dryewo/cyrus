@@ -75,7 +75,7 @@ Having a schema like this:
 ```clj
 (s/defschema Config
   {(s/optional-key :http-port)            s/Int
-   (s/optional-key :http-whitelisted-ips) [s/Str})
+   (s/optional-key :http-whitelisted-ips) [s/Str]})
 ```
 
 Only mentioned environment variables are selected and transformed according to the schema:
@@ -93,8 +93,8 @@ yields:
  :http-whitelisted-ips ["1.2.3.4" "4.3.2.1"]   ; parsed as YAML
 ```
 
-The environment is read from [environ](https://github.com/weavejester/environ) on the component start and overridden by args given to `(mount/start)`
-to allow experimenting with configuration without restarting REPL every time.
+The environment is read from [environ](https://github.com/weavejester/environ) on the component start and overridden
+by args given to `(mount/start-with-args)` to allow experimenting with configuration without restarting REPL every time.
 
 ### user.clj
 
