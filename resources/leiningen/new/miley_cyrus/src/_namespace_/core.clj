@@ -28,7 +28,7 @@
 
 (log/set-ns-log-levels!
   {"{{namespace}}.*" :debug
-   :all              :info})
+   :all :info})
 
 (log/set-default-output-fn!)
 

@@ -1,5 +1,6 @@
 (ns {{namespace}}.http
-  (:require [mount.core :refer [defstate]]
+  (:require [mount.core :as m]
+            [schema.core :as s]
             [aleph.http]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -8,7 +9,15 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-params wrap-json-body]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [manifold.deferred :as md]
-            [{{namespace}}.lib.logging :as log]))
+            [{{namespace}}.lib.logging :as log]
+            [{{namespace}}.env :as env]
+            [{{namespace}}.lib.config :as config]))
+
+(def config-defaults
+  {:http-port 8090})
+
+(s/defschema Config
+  {(s/optional-key :http-port) s/Int})
 
 (defn hello-handler [req]
   (log/info "Hello")
@@ -45,6 +54,7 @@
       ;(wrap-json-body)
       (wrap-canonical-redirect remove-trailing-slash)))
 
-(defstate server
-          :start (aleph.http/start-server (handler) {:port 8090})
-          :stop (.close server))
+(m/defstate server
+  :start (let [config (config/coerce-config (merge config-defaults env/env) Config)]
+           (aleph.http/start-server (handler) (config/remove-key-prefix :http- config)))
+  :stop (.close server))

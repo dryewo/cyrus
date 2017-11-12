@@ -6,7 +6,10 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.fzakaria/slf4j-timbre "0.3.7"]
-                 [mount "0.1.11"]{{#http}}
+                 [mount "0.1.11"]
+                 [environ "1.1.0"]
+                 [prismatic/schema "1.1.7"]
+                 [circleci/clj-yaml "0.5.6"]{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
                  [ring/ring-defaults "0.3.1"]

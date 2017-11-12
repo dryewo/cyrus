@@ -6,17 +6,28 @@
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.test :refer [run-all-tests]]
             [mount.core :as mount]
+            [clojure.edn :as edn]
             [{{namespace}}.core :as core]))
 
 (defn stop []
   (mount/stop))
 
+(defn slurp-if-exists [file]
+  (when (.exists (clojure.java.io/as-file file))
+    (slurp file)))
+
+(defn load-dev-env
+  ([]
+   (load-dev-env "./dev-env.edn"))
+  ([file]
+   (edn/read-string (slurp-if-exists file))))
+
 (defn start []
-  (mount/start))
+  (mount/start-with-args (load-dev-env)))
 
 (defn reset []
   (mount/stop)
-  (refresh :after 'mount/start))
+  (refresh :after 'user/start))
 
 (defn run-tests []
   (run-all-tests #"{{namespace}}.*-test"))
