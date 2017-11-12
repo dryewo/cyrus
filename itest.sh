@@ -19,13 +19,14 @@ run-test() {
         lein test
         lein uberjar
         lein ancient
+        TEST_TIMEOUT=1000 NREPL_ENABLED=true java -jar -jar "target/uberjar/$project_dir.jar"
     popd
 }
 
 run-test org.example/foo-bar1
 run-test org.example/foo-bar2 +http
 run-test org.example/foo-bar3 +db
-run-test org.example/foo-bar4 +http +db
+run-test org.example/foo-bar4 +nrepl +http +db
 
 # Just in case we want to try it outside of target/
 lein install

@@ -1,6 +1,8 @@
 (ns {{namespace}}.core
   (:require [mount.core :as mount]
-            [{{namespace}}.lib.logging :as log]{{#http}}
+            [environ.core :as environ]
+            [{{namespace}}.lib.logging :as log]{{#nrepl}}
+            [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}})
   (:gen-class))
@@ -17,11 +19,18 @@
   (log/set-level! :info)
   (log/set-log-level-from-env! (System/getenv "LOG_LEVEL"))
   (log/info "Starting {{name}} version %s" (implementation-version))
-  (try
+  (try{{#nrepl}}
+    (when (= "true" (System/getenv "NREPL_ENABLED"))
+      (nrepl/start-nrepl environ/env)){{/nrepl}}
     (mount/start)
-    (log/debug "Started")
-    ;; Prevent -main from exiting to keep the application running
-    @(promise)
+    (log/info "Application started")
+    ;; Prevent -main from exiting to keep the application running, unless it's a special test run
+    (if-let [test-timeout (System/getenv "TEST_TIMEOUT")]
+      (do
+        (log/warn "Test mode: terminating after %s ms" test-timeout)
+        (Thread/sleep (bigint test-timeout))
+        (System/exit 0))
+      @(promise))
     (catch Exception e
       (log/error e "Could not start the application because of %s." (str e))
       (System/exit 1))))
@@ -33,6 +42,8 @@
 (log/set-default-output-fn!)
 
 (comment
-  ;; Starting and stopping the application during development
+  ;; Starting and stopping the application during development{{#nrepl}} and NREPL access{{/nrepl}}
   (mount/start)
-  (mount/stop))
+  (mount/stop)
+  ;; Override some environment variables
+  (mount/start-with-args {:http-port 8888}))

@@ -10,18 +10,20 @@ Includes:
 * [timbre](https://github.com/ptaoussanis/timbre)
 * +http: [aleph](https://github.com/ztellman/aleph)
 * +db: PostgreSQL, [conman](https://github.com/luminus-framework/conman), [migratus](https://github.com/yogthos/migratus), [HugSQL](https://www.hugsql.org/)
-* Lean config management
+* +[nrepl](https://github.com/clojure/tools.nrepl): NREPL server for remote debugging
+* Lean configuration management
 * useful tweaks
 
 Roadmap:
 
 * +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API)
-* +[nrepl](https://github.com/clojure/tools.nrepl)
+* [Hystrix](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-clj)
+* Dockerfile
 
 ## Usage
 
 ```
-$ lein new miley-cyrus org.example.footeam/bar-project +http +db
+$ lein new miley-cyrus org.example.footeam/bar-project +http +db +nrepl
 ```
 
 ## Contents
@@ -41,7 +43,7 @@ per namespace is the higher of global and specific settings.
 
 ### HTTP server
 
-By adding `+http` option one can include a component that starts an HTTP server ([aleph](https://github.com/ztellman/aleph)).
+`+http` option adds a component that starts an HTTP server ([aleph](https://github.com/ztellman/aleph)).
 Example routes are provided as well as reasonable default middleware.
 
 ### DB access
@@ -56,6 +58,11 @@ Example routes are provided as well as reasonable default middleware.
 * PostgreSQL JDBC driver is included.
 * Example schema is generated and example unit tests are provided.
 * PostgreSQL 9.6 for development and testing can be launched in a Docker container by `./make.sh db`.
+
+### NREPL
+
+`+nrepl` adds a NREPL server that is started before the main application is. It has to be enabled
+by setting `NREPL_ENABLED=true`. Default port is `55000`, can be changed by setting `NREPL_PORT`. 
 
 ### Configuration management
 
@@ -76,7 +83,7 @@ Only mentioned environment variables are selected and transformed according to t
 ```
 HTTP_PORT=7777
 HTTP_WHITELISTED_IPS="[1.2.3.4, 4.3.2.1]"
-FOO_BAR_UNKNOWN=nfrjbqogpq-u8y7894yr984gbl
+HTTP_UNKNOWN=nfrjbqogpq-u8y7894yr984gbl
 ```
 
 yields:

@@ -2,6 +2,7 @@
   (:require [mount.core :as m]
             [schema.core :as s]
             [aleph.http]
+            [aleph.netty]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [compojure.middleware :refer [wrap-canonical-redirect]]
@@ -55,6 +56,10 @@
       (wrap-canonical-redirect remove-trailing-slash)))
 
 (m/defstate server
-  :start (let [config (config/coerce-config (merge config-defaults env/env) Config)]
-           (aleph.http/start-server (handler) (config/remove-key-prefix :http- config)))
+  :start (do
+           (log/info "Starting HTTP server")
+           (let [config         (config/coerce-config (merge config-defaults env/env) Config)
+                 started-server (aleph.http/start-server (handler) (config/remove-key-prefix :http- config))]
+             (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
+             started-server))
   :stop (.close server))

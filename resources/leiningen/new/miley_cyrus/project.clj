@@ -9,7 +9,8 @@
                  [mount "0.1.11"]
                  [environ "1.1.0"]
                  [prismatic/schema "1.1.7"]
-                 [circleci/clj-yaml "0.5.6"]{{#http}}
+                 [circleci/clj-yaml "0.5.6"]{{#nrepl}}
+                 [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
                  [ring/ring-defaults "0.3.1"]

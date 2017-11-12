@@ -31,6 +31,8 @@
         :year        (year)
         :date        (date)
         :now-ts      (timestamp)}
+       (when (contains? feature-set "+nrepl")
+         {:nrepl true})
        (when (contains? feature-set "+http")
          {:http true})
        (when (contains? feature-set "+db")
@@ -62,6 +64,8 @@
        ["src/{{nested-dirs}}/lib/config.clj" (render "src/_namespace_/lib/config.clj" data)]
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        "resources"]
+      (when (contains? feature-set "+nrepl")
+        [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
       (when (contains? feature-set "+http")
         [["src/{{nested-dirs}}/http.clj" (render "src/_namespace_/http.clj" data)]
          ["test/{{nested-dirs}}/http_test.clj" (render "test/_namespace_/http_test.clj" data)]])
@@ -75,7 +79,7 @@
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
-(def supported-features #{"+http" "+db"})
+(def supported-features #{"+http" "+db" "+nrepl"})
 
 (defn miley-cyrus [project-name & feature-params]
   (let [unsupported (not-empty (clojure.set/difference (set feature-params) supported-features))]
@@ -86,5 +90,5 @@
       (apply ->files (prepare-files project-name (set feature-params))))))
 
 (comment
-  (prepare-files "foo" #{"+http" "+db"})
+  (prepare-files "foo" #{"+http" "+db" "+nrepl"})
   )
