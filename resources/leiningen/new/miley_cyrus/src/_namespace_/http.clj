@@ -47,9 +47,9 @@
         (GET "/hello2" req (hello2-handler req))
         (GET "/json" req (json-handler req))
         (route/not-found nil))
-      (wrap-defaults api-defaults)
       ;; About JSON support read: https://github.com/ring-clojure/ring-json
       (wrap-json-response)
+      (wrap-defaults api-defaults)
       ;; Uncomment only one of the following
       ;(wrap-json-params)
       ;(wrap-json-body)

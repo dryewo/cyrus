@@ -10,6 +10,7 @@
   (m/start #'server)
   (is (= 200 (:status (http/get "http://localhost:8090/hello"))))
   (is (= 200 (:status (http/get "http://localhost:8090/hello2"))))
-  (is (= [200 {:message "Hello"}]
-         ((juxt :status :body) (http/get "http://localhost:8090/json" {:as :json}))))
+  (is (= [200 {:message "Hello"} "application/json; charset=utf-8"]
+         ((juxt :status :body #(get-in % [:headers "Content-Type"]))
+           (http/get "http://localhost:8090/json" {:as :json}))))
   (m/stop))

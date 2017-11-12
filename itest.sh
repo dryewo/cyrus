@@ -30,4 +30,4 @@ run-test org.example/foo-bar4 +nrepl +http +db
 
 # Just in case we want to try it outside of target/
 lein install
-echo "Use:   MILEY_CYRUS_TEST=1 lein new miley-cyrus org.example.footeam/bar-project +http +db --snapshot"
+echo "Use:   MILEY_CYRUS_TEST=1 lein new miley-cyrus org.example.footeam/bar-project --snapshot -- +http +db +nrepl"
