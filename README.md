@@ -5,18 +5,18 @@
 
 Includes:
 
-* [mount](https://github.com/tolitius/mount)
-* dev/user.clj
-* [timbre](https://github.com/ptaoussanis/timbre)
-* +http: [aleph](https://github.com/ztellman/aleph)
+* [mount](https://github.com/tolitius/mount) for state management
+* dev/user.clj for REPL-driven development
+* [timbre](https://github.com/ptaoussanis/timbre) for logging
+* +http: [aleph](https://github.com/ztellman/aleph) + [Compojure](https://github.com/weavejester/compojure) (and [Ring](https://github.com/ring-clojure/ring))
 * +db: PostgreSQL, [conman](https://github.com/luminus-framework/conman), [migratus](https://github.com/yogthos/migratus), [HugSQL](https://www.hugsql.org/)
 * +[nrepl](https://github.com/clojure/tools.nrepl): NREPL server for remote debugging
+* +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API), includes +http
 * Lean configuration management
 * useful tweaks
 
 Roadmap:
 
-* +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API)
 * [Hystrix](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-clj)
 * Dockerfile
 
@@ -46,6 +46,18 @@ per namespace is the higher of global and specific settings.
 `+http` option adds a component that starts an HTTP server ([aleph](https://github.com/ztellman/aleph)).
 Example routes are provided as well as reasonable default middleware.
 
+### Swagger1st API
+
+`+swagger1st` adds `/api` route that is handled by a separate library: [Swagger1st](https://github.com/zalando-stups/swagger1st).  
+It allows request routing and parameter parsing based on [OpenAPI](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) definition in YAML format.
+Highly recommended for any more or less serious API service.
+
+Additionally exposes Swagger UI and spec:
+* `/api/ui`
+* `/api/swagger.json` 
+
+This option automatically includes `+http`.
+
 ### DB access
 
 `+db` option adds a component that includes database access layer, built on:
@@ -57,7 +69,12 @@ Example routes are provided as well as reasonable default middleware.
   Migrations are always applied when the DB component starts up.
 * PostgreSQL JDBC driver is included.
 * Example schema is generated and example unit tests are provided.
-* PostgreSQL 9.6 for development and testing can be launched in a Docker container by `./make.sh db`.
+
+PostgreSQL 9.6 for development and testing can be launched in a Docker container:
+
+```sh
+./make.sh db
+```
 
 ### NREPL
 

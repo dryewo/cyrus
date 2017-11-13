@@ -82,10 +82,11 @@
   ([data]
    (default-log-output-fn nil data))
   ([_ data]
-   (let [{:keys [level ?ns-str ?msg-fmt vargs ?err]} data]
-     (format "%5s [%s] %s - %s%s"
+   (let [{:keys [level ?ns-str ?msg-fmt vargs ?err context]} data]
+     (format "%5s [%s]%s %s - %s%s"
              (str/upper-case (name level))
              (.getName (Thread/currentThread))
+             (str (:request context))
              (abbrev-name ?ns-str)
              (if-let [fmt ?msg-fmt]
                (apply format fmt vargs)

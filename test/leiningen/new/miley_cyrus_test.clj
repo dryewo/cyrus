@@ -34,3 +34,11 @@
                   :nested-dirs "aaa_bbb"
                   :prefix      "ab"}))
   )
+
+(deftest test-resolve-dependencies
+  (tabular
+    (fact "Can handle transitive or cyclic dependencies"
+      (add-dependent-features ?deps ?input) => ?result)
+    ?deps ?input ?result
+    {:a [:b] :b [:c]} [:a] #{:a :b :c}
+    {:a [:b] :b [:a]} [:a] #{:a :b}))

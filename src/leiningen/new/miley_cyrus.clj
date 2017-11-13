@@ -35,6 +35,8 @@
          {:nrepl true})
        (when (contains? feature-set "+http")
          {:http true})
+       (when (contains? feature-set "+swagger1st")
+         {:swagger1st true})
        (when (contains? feature-set "+db")
          {:db true})))))
 
@@ -66,6 +68,11 @@
        "resources"]
       (when (contains? feature-set "+nrepl")
         [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
+      (when (contains? feature-set "+swagger1st")
+        [["resources/api.yaml" (render "resources/api.yaml" data)]
+         ["src/{{nested-dirs}}/lib/swagger1st.clj" (render "src/_namespace_/lib/swagger1st.clj" data)]
+         ["src/{{nested-dirs}}/api.clj" (render "src/_namespace_/api.clj" data)]
+         ["test/{{nested-dirs}}/api_test.clj" (render "test/_namespace_/api_test.clj" data)]])
       (when (contains? feature-set "+http")
         [["src/{{nested-dirs}}/http.clj" (render "src/_namespace_/http.clj" data)]
          ["test/{{nested-dirs}}/http_test.clj" (render "test/_namespace_/http_test.clj" data)]])
@@ -79,16 +86,27 @@
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
-(def supported-features #{"+http" "+db" "+nrepl"})
+(def supported-features #{"+http" "+db" "+nrepl" "+swagger1st"})
+
+(def feature-dependencies
+  {"+swagger1st" ["+http"]})
+
+(defn add-dependent-features "recursively resolves features"
+  [dependencies features]
+  (let [features  (set features)
+        features+ (into features (for [f  features
+                                       df (get dependencies f)]
+                                   df))]
+    (if (= features+ features)
+      features+
+      (recur dependencies features+))))
 
 (defn miley-cyrus [project-name & feature-params]
-  (let [unsupported (not-empty (clojure.set/difference (set feature-params) supported-features))]
+  (let [features     (set feature-params)
+        unsupported  (not-empty (clojure.set/difference features supported-features))
+        all-features (add-dependent-features feature-dependencies features)]
     (cond
       unsupported
       (main/info "Unrecognized options:" unsupported "\nSupported options are:" supported-features)
       :else
-      (apply ->files (prepare-files project-name (set feature-params))))))
-
-(comment
-  (prepare-files "foo" #{"+http" "+db" "+nrepl"})
-  )
+      (apply ->files (prepare-files project-name all-features)))))

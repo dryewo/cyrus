@@ -15,7 +15,9 @@
                  [compojure "1.6.0"]
                  [ring/ring-defaults "0.3.1"]
                  [ring/ring-json "0.4.0"]
-                 [clj-http "3.7.0"]{{/http}}{{#db}}
+                 [amalloy/ring-gzip-middleware "0.1.3"]
+                 [clj-http "3.7.0"]{{/http}}{{#swagger1st}}
+                 [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#db}}
                  [conman "0.7.1"]
                  [org.postgresql/postgresql "42.1.4"]
                  [cheshire "5.8.0"]
