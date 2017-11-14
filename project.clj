@@ -1,4 +1,4 @@
-(defproject cyrus/lein-template "0.8.0"
+(defproject cyrus/lein-template "0.9.0"
   :description "A very opinionated Clojure project template."
   :url "https://github.com/dryewo/cyrus"
   :license {:name "Apache License"
