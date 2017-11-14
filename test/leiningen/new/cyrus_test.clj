@@ -1,7 +1,7 @@
-(ns leiningen.new.miley-cyrus-test
+(ns leiningen.new.cyrus-test
   (:require [clojure.test :refer :all]
             [midje.sweet :refer :all]
-            [leiningen.new.miley-cyrus :refer :all]))
+            [leiningen.new.cyrus :refer :all]))
 
 (deftest test-prepare-data
   (facts ""

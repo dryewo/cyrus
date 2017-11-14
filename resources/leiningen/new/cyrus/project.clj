@@ -18,7 +18,7 @@
                  [amalloy/ring-gzip-middleware "0.1.3"]
                  [clj-http "3.7.0"]{{/http}}{{#swagger1st}}
                  [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#db}}
-                 [conman "0.7.1"]
+                 [conman "0.7.2"]
                  [org.postgresql/postgresql "42.1.4"]
                  [cheshire "5.8.0"]
                  [camel-snake-kebab "0.4.0"]

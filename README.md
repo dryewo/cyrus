@@ -1,7 +1,7 @@
 # A very opinionated Clojure project template
 
-[![Build Status](https://travis-ci.org/dryewo/miley-cyrus.svg?branch=master)](https://travis-ci.org/dryewo/miley-cyrus)
-[![Clojars Project](https://img.shields.io/clojars/v/miley-cyrus/lein-template.svg)](https://clojars.org/miley-cyrus/lein-template)
+[![Build Status](https://travis-ci.org/dryewo/cyrus.svg?branch=master)](https://travis-ci.org/dryewo/cyrus)
+[![Clojars Project](https://img.shields.io/clojars/v/cyrus/lein-template.svg)](https://clojars.org/cyrus/lein-template)
 
 Includes:
 
@@ -23,7 +23,7 @@ Roadmap:
 ## Usage
 
 ```
-$ lein new miley-cyrus org.example.footeam/bar-project +http +db +nrepl
+$ lein new cyrus org.example.footeam/bar-project +http +db +nrepl
 ```
 
 ## Contents
@@ -131,7 +131,7 @@ In order to try the template out without releasing to clojars, install it to the
 ```
 $ lein install
 $ cd target    # Or any other directory
-$ lein new miley-cyrus org.example.footeam/bar-project --snapshot
+$ lein new cyrus org.example.footeam/bar-project --snapshot -- +swagger1st +nrepl +db +http
 ```
 
 ## Testing

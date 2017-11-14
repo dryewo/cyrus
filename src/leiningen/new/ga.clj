@@ -28,6 +28,6 @@
 
 (comment
   (validate (make-payload {:t  "event"
-                           :el "miley-cyrus"
+                           :el "cyrus"
                            :ec "leinnew"}))
   )

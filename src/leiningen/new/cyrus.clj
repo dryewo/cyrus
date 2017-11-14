@@ -1,4 +1,4 @@
-(ns leiningen.new.miley-cyrus
+(ns leiningen.new.cyrus
   (:require [leiningen.new.templates :refer [renderer year date project-name
                                              ->files sanitize-ns name-to-path
                                              multi-segment sanitize]]
@@ -44,13 +44,13 @@
   "Generates arguments for ->files. Extracted for testing."
   [name feature-set]
   (let [data   (prepare-data name feature-set)
-        render (renderer "miley_cyrus")
+        render (renderer "cyrus")
         now-ts (timestamp)]
     (main/debug "Template data:" data)
-    (main/info "Generating a project called" name "based on the 'miley-cyrus' template.")
-    (when-not (System/getenv "MILEY_CYRUS_TEST")
+    (main/info "Generating a project called" name "based on the 'cyrus' template.")
+    (when-not (System/getenv "CYRUS_TEST")
       (ga/hit (ga/make-payload {:t  "event"
-                                :an "miley-cyrus"
+                                :an "cyrus"
                                 :el "leinnew"})))
     (concat
       [data
@@ -101,7 +101,7 @@
       features+
       (recur dependencies features+))))
 
-(defn miley-cyrus [project-name & feature-params]
+(defn cyrus [project-name & feature-params]
   (let [features     (set feature-params)
         unsupported  (not-empty (clojure.set/difference features supported-features))
         all-features (add-dependent-features feature-dependencies features)]

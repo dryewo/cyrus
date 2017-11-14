@@ -10,10 +10,10 @@ lein do clean, test
 cd target
 # We don't need to install it to ~/.m2, because it's already available on the classpath
 
-export MILEY_CYRUS_TEST=1
+export CYRUS_TEST=1
 
 run-test() {
-    DEBUG=1 lein new miley-cyrus "$@"
+    DEBUG=1 lein new cyrus "$@"
     local project_dir=${1##*/}
     pushd "$project_dir"
         lein test
@@ -31,4 +31,4 @@ run-test org.example/foo-bar5 +nrepl +swagger1st +http +db
 
 # Just in case we want to try it outside of target/
 lein install
-echo "Use:   MILEY_CYRUS_TEST=1 lein new miley-cyrus org.example.footeam/bar-project --snapshot -- +http +db +nrepl"
+echo "Use:   CYRUS_TEST=1 lein new cyrus org.example.footeam/bar-project --snapshot -- +http +db +nrepl"
