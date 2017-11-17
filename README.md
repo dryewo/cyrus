@@ -5,19 +5,19 @@
 
 Includes:
 
-* [mount](https://github.com/tolitius/mount) for state management
+* [mount] for state management
 * dev/user.clj for REPL-driven development
-* [timbre](https://github.com/ptaoussanis/timbre) for logging
-* +http: [aleph](https://github.com/ztellman/aleph) + [Compojure](https://github.com/weavejester/compojure) (and [Ring](https://github.com/ring-clojure/ring))
-* +db: PostgreSQL, [conman](https://github.com/luminus-framework/conman), [migratus](https://github.com/yogthos/migratus), [HugSQL](https://www.hugsql.org/)
-* +[nrepl](https://github.com/clojure/tools.nrepl): NREPL server for remote debugging
-* +[swagger1st](https://github.com/zalando-stups/swagger1st) (RESTful API), includes +http
-* Lean configuration management
+* [timbre] for logging
+* +http: [aleph] + [Compojure] (and [Ring])
+* +db: PostgreSQL, [conman], [migratus], [HugSQL]
+* +[nrepl]: NREPL server for remote debugging
+* +[swagger1st] (RESTful API), includes +http
+* Lean configuration management with [squeeze]
 * useful tweaks
 
 Roadmap:
 
-* [Hystrix](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-clj)
+* [Hystrix]
 * Dockerfile
 
 ## Usage
@@ -30,12 +30,11 @@ $ lein new cyrus org.example.footeam/bar-project +http +db +nrepl
 
 ### State management
 
-[mount](https://github.com/tolitius/mount) is chosen over [component](https://github.com/stuartsierra/component)
-for its lean spirit and ease of use.
+[mount] is chosen over [component] for its lean spirit and ease of use.
 
 ### Logging
 
-* Logging is supported via [timbre](https://github.com/ptaoussanis/timbre). Additionally, an opinionated format is provided
+* Logging is supported via [timbre]. Additionally, an opinionated format is provided
 via `(lib.logging/default-log-output-fn)`.
 * Overlall log level can be overridden by setting `LOG_LEVEL` environment variable.
 * Log level per namespace is configured in core.clj using `(lib.logging/set-ns-log-levels)!`. The resulting log level 
@@ -43,13 +42,13 @@ per namespace is the higher of global and specific settings.
 
 ### HTTP server
 
-`+http` option adds a component that starts an HTTP server ([aleph](https://github.com/ztellman/aleph)).
+`+http` option adds a component that starts an HTTP server ([aleph]).
 Example routes are provided as well as reasonable default middleware.
 
 ### Swagger1st API
 
-`+swagger1st` adds `/api` route that is handled by a separate library: [Swagger1st](https://github.com/zalando-stups/swagger1st).  
-It allows request routing and parameter parsing based on [OpenAPI](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) definition in YAML format.
+`+swagger1st` adds `/api` route that is handled by a separate library: [Swagger1st].  
+It allows request routing and parameter parsing based on [OpenAPI] definition in YAML format.
 Highly recommended for any more or less serious API service.
 
 Additionally exposes Swagger UI and spec:
@@ -62,10 +61,10 @@ This option automatically includes `+http`.
 
 `+db` option adds a component that includes database access layer, built on:
 
-* [HugSQL](https://www.hugsql.org/) to generate access functions. Additionally, some interceptors are provided
+* [HugSQL] to generate access functions. Additionally, some interceptors are provided
   to convert `camel_case` column names to `:kebab-case` keywords in result maps.
-* [conman](https://github.com/luminus-framework/conman) for connection pool.
-* [migratus](https://github.com/yogthos/migratus) for schema migrations.
+* [conman] for connection pool.
+* [migratus] for schema migrations.
   Migrations are always applied when the DB component starts up.
 * PostgreSQL JDBC driver is included.
 * Example schema is generated and example unit tests are provided.
@@ -83,9 +82,8 @@ by setting `NREPL_ENABLED=true`. Default port is `55000`, can be changed by sett
 
 ### Configuration management
 
-The app can only be configured through environment variables
-(following [Twelve-Factor App manifesto](https://12factor.net/config)).
-Each component defines its own schema ([prismatic/schema](https://github.com/plumatic/schema)), which is used to 
+The app can only be configured through environment variables (following [Twelve-Factor App manifesto]).
+Each component defines its own schema ([prismatic/schema]), which is used to 
 validate and coerce the selected environment variables during component start-up:
 
 Having a schema like this:
@@ -110,7 +108,7 @@ yields:
  :http-whitelisted-ips ["1.2.3.4" "4.3.2.1"]   ; parsed as YAML
 ```
 
-The environment is read from [environ](https://github.com/weavejester/environ) on the component start and overridden
+The environment is read from [environ] on the component start and overridden
 by args given to `(mount/start-with-args)` to allow experimenting with configuration without restarting REPL every time.
 
 ### user.clj
@@ -142,7 +140,7 @@ $ ./itest.sh
 
 ## FAQ
 
-**Q.** Why another template? There is already [Luminus](https://github.com/luminus-framework/luminus-template), which is more feature-rich.  
+**Q.** Why another template? There is already [Luminus], which is more feature-rich.  
 **A.** While Luminus is a great project, made with a lot of love, it already carries an opinion, which in some points is 
  different from mine. Also, even without additional options it generates too much (not always you need front-end, configuration management with cprop is IMHO an overkill etc.)
  Leiningen templates are not extensible, so I had to make my own, reusing best parts of Luminus.
@@ -162,3 +160,22 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+[squeeze]: https://github.com/dryewo/squeeze
+[mount]: https://github.com/tolitius/mount
+[timbre]: https://github.com/ptaoussanis/timbre
+[aleph]: https://github.com/ztellman/aleph
+[Compojure]: https://github.com/weavejester/compojure
+[Ring]: https://github.com/ring-clojure/ring
+[conman]: https://github.com/luminus-framework/conman
+[migratus]: https://github.com/yogthos/migratus
+[HugSQL]: https://www.hugsql.org/
+[nrepl]: https://github.com/clojure/tools.nrepl
+[swagger1st]: https://github.com/zalando-stups/swagger1st
+[Hystrix]: https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-clj
+[component]: https://github.com/stuartsierra/component
+[OpenAPI]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
+[Twelve-Factor App manifesto]: https://12factor.net/config
+[prismatic/schema]: https://github.com/plumatic/schema
+[environ]: https://github.com/weavejester/environ
+[Luminus]: https://github.com/luminus-framework/luminus-template

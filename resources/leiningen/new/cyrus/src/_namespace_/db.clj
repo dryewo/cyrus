@@ -4,7 +4,7 @@
             [schema.core :as s]
             [migratus.core :as migratus]
             [clojure.java.jdbc :as jdbc]
-            [{{namespace}}.lib.config :as config]
+            [squeeze.core :as squeeze]
             [{{namespace}}.lib.db]
             [{{namespace}}.env :as env]))
 
@@ -22,8 +22,8 @@
    :migration-dir "db/migrations"})
 
 (m/defstate ^:dynamic *db*
-  :start (let [config (config/coerce-config (merge config-defaults @env/env) Config)
-               db     (conman/connect! (config/remove-key-prefix :db- config))]
+  :start (let [config (squeeze/coerce-config Config (merge config-defaults @env/env))
+               db     (conman/connect! (squeeze/remove-key-prefix :db- config))]
            (migratus/migrate (merge migratus-config {:db db}))
            db)
   :stop (conman/disconnect! @*db*))

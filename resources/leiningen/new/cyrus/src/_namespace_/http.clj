@@ -13,7 +13,7 @@
             [ring.util.response :as resp]
             [manifold.deferred :as md]
             [{{namespace}}.lib.logging :as log]
-            [{{namespace}}.lib.config :as config]
+            [squeeze.core :as squeeze]
             [{{namespace}}.env :as env]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))
 
@@ -76,8 +76,8 @@
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
-           (let [config         (config/coerce-config (merge config-defaults @env/env) Config)
-                 started-server (aleph.http/start-server handler (config/remove-key-prefix :http- config))]
+           (let [config         (squeeze/coerce-config Config (merge config-defaults @env/env))
+                 started-server (aleph.http/start-server handler (squeeze/remove-key-prefix :http- config))]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
   :stop (.close @server))

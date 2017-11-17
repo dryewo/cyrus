@@ -27,7 +27,7 @@ run-test org.example/foo-bar1
 run-test org.example/foo-bar2 +http
 run-test org.example/foo-bar3 +db
 run-test org.example/foo-bar4 +swagger1st
-run-test org.example/foo-bar5 +nrepl +swagger1st +http +db
+run-test org.example/foo-bar5 +all
 
 # Just in case we want to try it outside of target/
 lein install

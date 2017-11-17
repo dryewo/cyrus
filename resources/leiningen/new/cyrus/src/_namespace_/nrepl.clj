@@ -1,7 +1,7 @@
 (ns {{namespace}}.nrepl
   (:require [clojure.tools.nrepl.server :as n]
             [schema.core :as s]
-            [{{namespace}}.lib.config :as config]
+            [squeeze.core :as squeeze]
             [{{namespace}}.lib.logging :as log]))
 
 (def config-defaults
@@ -24,8 +24,8 @@
 
 (defn start-nrepl [env]
   (log/info "Starting NREPL server")
-  (let [config         (config/coerce-config (merge config-defaults env) Config)
-        started-server (apply n/start-server (flatten1 (config/remove-key-prefix :nrepl- config)))]
+  (let [config         (squeeze/coerce-config Config (merge config-defaults env))
+        started-server (apply n/start-server (flatten1 (squeeze/remove-key-prefix :nrepl- config)))]
     (log/info "NREPL server is listening on %s" (str (:server-socket started-server)))
     (alter-var-root #'nrepl-server (constantly started-server))))
 

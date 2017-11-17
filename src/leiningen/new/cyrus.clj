@@ -63,7 +63,6 @@
        ["src/{{nested-dirs}}/core.clj" (render "src/_namespace_/core.clj" data)]
        ["src/{{nested-dirs}}/env.clj" (render "src/_namespace_/env.clj" data)]
        ["src/{{nested-dirs}}/lib/logging.clj" (render "src/_namespace_/lib/logging.clj" data)]
-       ["src/{{nested-dirs}}/lib/config.clj" (render "src/_namespace_/lib/config.clj" data)]
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        "resources"]
       (when (contains? feature-set "+nrepl")
@@ -80,16 +79,16 @@
         [["src/{{nested-dirs}}/lib/db.clj" (render "src/_namespace_/lib/db.clj" data)]
          ["src/{{nested-dirs}}/db.clj" (render "src/_namespace_/db.clj" data)]
          ["test/{{nested-dirs}}/db_test.clj" (render "test/_namespace_/db_test.clj" data)]
-         ["test/{{nested-dirs}}/lib/config_test.clj" (render "test/_namespace_/lib/config_test.clj" data)]
          ["make.sh" (render "make.sh" data) :executable true]
          ["resources/db/queries.sql" (render "resources/db/queries.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
-(def supported-features #{"+http" "+db" "+nrepl" "+swagger1st"})
+(def supported-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st"})
 
 (def feature-dependencies
-  {"+swagger1st" ["+http"]})
+  {"+swagger1st" ["+http"]
+   "+all"        ["+swagger1st" "+db" "+nrepl" "+swagger1st"]})
 
 (defn add-dependent-features "recursively resolves features"
   [dependencies features]
