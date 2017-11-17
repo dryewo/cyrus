@@ -8,8 +8,7 @@
                  [com.fzakaria/slf4j-timbre "0.3.7"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
-                 [prismatic/schema "1.1.7"]
-                 [circleci/clj-yaml "0.5.6"]{{#nrepl}}
+                 [squeeze "0.1.0"]{{#nrepl}}
                  [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
@@ -18,7 +17,7 @@
                  [amalloy/ring-gzip-middleware "0.1.3"]
                  [clj-http "3.7.0"]{{/http}}{{#swagger1st}}
                  [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#db}}
-                 [conman "0.7.2"]
+                 [conman "0.7.3"]
                  [org.postgresql/postgresql "42.1.4"]
                  [cheshire "5.8.0"]
                  [camel-snake-kebab "0.4.0"]

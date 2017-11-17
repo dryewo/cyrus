@@ -76,8 +76,8 @@
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
-           (let [config         (config/coerce-config (merge config-defaults env/env) Config)
+           (let [config         (config/coerce-config (merge config-defaults @env/env) Config)
                  started-server (aleph.http/start-server handler (config/remove-key-prefix :http- config))]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
-  :stop (.close server))
+  :stop (.close @server))

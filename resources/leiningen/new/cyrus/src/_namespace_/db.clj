@@ -3,6 +3,7 @@
             [mount.core :as m]
             [schema.core :as s]
             [migratus.core :as migratus]
+            [clojure.java.jdbc :as jdbc]
             [{{namespace}}.lib.config :as config]
             [{{namespace}}.lib.db]
             [{{namespace}}.env :as env]))
@@ -21,11 +22,11 @@
    :migration-dir "db/migrations"})
 
 (m/defstate ^:dynamic *db*
-  :start (let [config (config/coerce-config (merge config-defaults env/env) Config)
+  :start (let [config (config/coerce-config (merge config-defaults @env/env) Config)
                db     (conman/connect! (config/remove-key-prefix :db- config))]
            (migratus/migrate (merge migratus-config {:db db}))
            db)
-  :stop (conman/disconnect! *db*))
+  :stop (conman/disconnect! @*db*))
 
 (conman/bind-connection *db* "db/queries.sql")
 
@@ -35,6 +36,13 @@
   (get-memory {:id "1"})
   (update-memory! {:id "1" :memory-text "bar"})
   (delete-memory! {:id "1"})
+
+  ;; Transaction example
+  (conman/with-transaction [*db*]
+    (jdbc/db-set-rollback-only! @*db*)
+    (create-memory! {:id "2" :memory-text "foo"})
+    (get-memory {:id "2"}))
+  (get-memory {:id "2"})
 
   ;; Helper to create new migrations
   (migratus/create migratus-config "create-user")

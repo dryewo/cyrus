@@ -1,11 +1,14 @@
 (ns {{namespace}}.core
-  (:require [mount.core :as mount]
+  (:require [mount.core :as m]
             [environ.core :as environ]
             [{{namespace}}.lib.logging :as log]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}})
   (:gen-class))
+
+;; Make states explicitly derefable: @server, @*db* @env
+(m/in-cljc-mode)
 
 (defn implementation-version []
   (or
@@ -22,7 +25,7 @@
   (try{{#nrepl}}
     (when (= "true" (System/getenv "NREPL_ENABLED"))
       (nrepl/start-nrepl environ/env)){{/nrepl}}
-    (mount/start)
+    (m/start)
     (log/info "Application started")
     ;; Prevent -main from exiting to keep the application running, unless it's a special test run
     (if-let [test-timeout (System/getenv "TEST_TIMEOUT")]
@@ -43,7 +46,7 @@
 
 (comment
   ;; Starting and stopping the application during development{{#nrepl}} and NREPL access{{/nrepl}}
-  (mount/start)
-  (mount/stop)
+  (m/start)
+  (m/stop)
   ;; Override some environment variables
-  (mount/start-with-args {:http-port 8888}))
+  (m/start-with-args {:http-port 8888}))

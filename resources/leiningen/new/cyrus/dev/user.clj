@@ -5,12 +5,12 @@
             [clojure.repl :refer [apropos dir doc find-doc pst source]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.test :refer [run-all-tests]]
-            [mount.core :as mount]
+            [mount.core :as m]
             [clojure.edn :as edn]
             [{{namespace}}.core :as core]))
 
 (defn stop []
-  (mount/stop))
+  (m/stop))
 
 (defn slurp-if-exists [file]
   (when (.exists (clojure.java.io/as-file file))
@@ -23,10 +23,10 @@
    (edn/read-string (slurp-if-exists file))))
 
 (defn start []
-  (mount/start-with-args (load-dev-env)))
+  (m/start-with-args (load-dev-env)))
 
 (defn reset []
-  (mount/stop)
+  (m/stop)
   (refresh :after 'user/start))
 
 (defn run-tests []
