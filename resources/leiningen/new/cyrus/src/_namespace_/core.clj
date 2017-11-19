@@ -7,6 +7,8 @@
             [{{namespace}}.db]{{/db}})
   (:gen-class))
 
+;; HINT: After adding a new defstate restart the REPL
+
 ;; Make states explicitly derefable: @server, @*db* @env
 (m/in-cljc-mode)
 

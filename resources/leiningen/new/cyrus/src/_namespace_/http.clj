@@ -6,14 +6,15 @@
             [compojure.core :refer :all]
             [compojure.route :as route]
             [compojure.middleware :refer [wrap-canonical-redirect]]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params wrap-json-body]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.util.response :as resp]
             [manifold.deferred :as md]
-            [{{namespace}}.lib.logging :as log]
             [squeeze.core :as squeeze]
+            [{{namespace}}.lib.logging :as log]
+            [{{namespace}}.lib.http :as httplib]
             [{{namespace}}.env :as env]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))
 
@@ -43,8 +44,12 @@
     uri
     (compojure.middleware/remove-trailing-slash uri)))
 
+(def api-defaults
+  (-> ring.middleware.defaults/api-defaults
+      (assoc-in [:security :hsts] true)))
+
 ;; Middleware rule of thumb: Request goes bottom to top, response goes top to bottom
-(def handler
+(defn make-handler []
   (-> (routes
         ;; Normal routes, can view in the browser
         (-> (routes
@@ -66,18 +71,19 @@
               (ANY "/api" req (resp/redirect "/api/ui/" 301))
               (ANY "/api/" req (resp/redirect "/api/ui/" 301))
               (ANY "/api/ui" req (resp/redirect "/api/ui/" 301))
-              (ANY "/api/*" req (api/handler req)))
-            (wrap-json-response)){{/swagger1st}}
+              (ANY "/api/*" req (@api/handler req)))
+            (wrap-json-response)
+            (wrap-defaults api-defaults)){{/swagger1st}}
         (route/not-found nil))
       ;; It never hurts to gzip
-      (wrap-gzip)))
-
+      (wrap-gzip)
+      (httplib/wrap-request-log-context)))
 
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
            (let [config         (squeeze/coerce-config Config (merge config-defaults @env/env))
-                 started-server (aleph.http/start-server handler (squeeze/remove-key-prefix :http- config))]
+                 started-server (aleph.http/start-server (make-handler) (squeeze/remove-key-prefix :http- config))]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
   :stop (.close @server))

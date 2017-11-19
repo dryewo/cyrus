@@ -9,6 +9,11 @@ produces:
 - application/json
 consumes:
 - application/json
+{{#swagger1st-oauth2}}
+
+security:
+- oauth2: [uid]
+{{/swagger1st-oauth2}}
 
 paths:
   '/hello/{who}':
@@ -21,3 +26,13 @@ paths:
       responses:
         default:
           description: Say hello
+{{#swagger1st-oauth2}}
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: https://example.com/oauth2/dialog
+    scopes:
+      uid: Unique identifier of the user accessing the service.
+{{/swagger1st-oauth2}}

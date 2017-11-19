@@ -37,6 +37,8 @@
          {:http true})
        (when (contains? feature-set "+swagger1st")
          {:swagger1st true})
+       (when (contains? feature-set "+swagger1st-oauth2")
+         {:swagger1st-oauth2 true})
        (when (contains? feature-set "+db")
          {:db true})))))
 
@@ -69,12 +71,14 @@
         [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
       (when (contains? feature-set "+swagger1st")
         [["resources/api.yaml" (render "resources/api.yaml" data)]
-         ["src/{{nested-dirs}}/lib/swagger1st.clj" (render "src/_namespace_/lib/swagger1st.clj" data)]
          ["src/{{nested-dirs}}/api.clj" (render "src/_namespace_/api.clj" data)]
          ["test/{{nested-dirs}}/api_test.clj" (render "test/_namespace_/api_test.clj" data)]])
+      (when (contains? feature-set "+swagger1st-oauth2")
+        [["src/{{nested-dirs}}/authenticator.clj" (render "src/_namespace_/authenticator.clj" data)]])
       (when (contains? feature-set "+http")
         [["src/{{nested-dirs}}/http.clj" (render "src/_namespace_/http.clj" data)]
-         ["test/{{nested-dirs}}/http_test.clj" (render "test/_namespace_/http_test.clj" data)]])
+         ["test/{{nested-dirs}}/http_test.clj" (render "test/_namespace_/http_test.clj" data)]
+         ["src/{{nested-dirs}}/lib/http.clj" (render "src/_namespace_/lib/http.clj" data)]])
       (when (contains? feature-set "+db")
         [["src/{{nested-dirs}}/lib/db.clj" (render "src/_namespace_/lib/db.clj" data)]
          ["src/{{nested-dirs}}/db.clj" (render "src/_namespace_/db.clj" data)]
@@ -84,11 +88,12 @@
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
-(def supported-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st"})
+(def supported-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2"})
 
 (def feature-dependencies
-  {"+swagger1st" ["+http"]
-   "+all"        ["+swagger1st" "+db" "+nrepl" "+swagger1st"]})
+  {"+swagger1st"        ["+http"]
+   "+swagger1st-oauth2" ["+swagger1st"]
+   "+all"               supported-features})
 
 (defn add-dependent-features "recursively resolves features"
   [dependencies features]

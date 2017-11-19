@@ -28,7 +28,7 @@
            db)
   :stop (conman/disconnect! @*db*))
 
-(conman/bind-connection *db* "db/queries.sql")
+(conman/bind-connection-deref *db* "db/queries.sql")
 
 (comment
   ;; CRUD operations

@@ -11,7 +11,7 @@ Includes:
 * +http: [aleph] + [Compojure] (and [Ring])
 * +db: PostgreSQL, [conman], [migratus], [HugSQL]
 * +[nrepl]: NREPL server for remote debugging
-* +[swagger1st] (RESTful API), includes +http
+* +[swagger1st] (RESTful API), includes +http.
 * Lean configuration management with [squeeze]
 * useful tweaks
 
@@ -26,11 +26,16 @@ Roadmap:
 $ lein new cyrus org.example.footeam/bar-project +http +db +nrepl
 ```
 
+Read below for the list of available options.
+
+Additionally, you can use `+all` option that includes everything.
+
 ## Contents
 
 ### State management
 
-[mount] is chosen over [component] for its lean spirit and ease of use.
+[mount] is chosen over [component] for its lean spirit and ease of use. Mount runs in `(in-cljc-mode)` to make all
+the states *derefable* (implementing `IDeref`) — that means, you have to explicitly `@` them.
 
 ### Logging
 
@@ -56,6 +61,10 @@ Additionally exposes Swagger UI and spec:
 * `/api/swagger.json` 
 
 This option automatically includes `+http`.
+
+A variant of this option `+swagger1st-oauth2` includes OAuth2 protection of API endpoints, checking
+access tokens against Introspection Endpoint configured by `TOKENINFO_URL` environment variable.
+See [fahrscheine-bitte] for more information.
 
 ### DB access
 
@@ -84,7 +93,7 @@ by setting `NREPL_ENABLED=true`. Default port is `55000`, can be changed by sett
 
 The app can only be configured through environment variables (following [Twelve-Factor App manifesto]).
 Each component defines its own schema ([prismatic/schema]), which is used to 
-validate and coerce the selected environment variables during component start-up:
+validate and coerce (using [squeeze]) the selected environment variables into it during component start-up:
 
 Having a schema like this:
 ```clj
@@ -179,3 +188,4 @@ limitations under the License.
 [prismatic/schema]: https://github.com/plumatic/schema
 [environ]: https://github.com/weavejester/environ
 [Luminus]: https://github.com/luminus-framework/luminus-template
+[fahrscheine-bitte]: https://github.com/dryewo/fahrscheine-bitte
