@@ -18,15 +18,23 @@
    (s/optional-key :db-password) s/Str})
 
 (def migratus-config
-  {:store         :database
-   :migration-dir "db/migrations"})
+  {:store                :database
+   :init-script          "init.sql"
+   :init-in-transaction? true
+   :migration-dir        "db/migrations"})
 
 (m/defstate ^:dynamic *db*
   :start (let [config (squeeze/coerce-config Config (merge config-defaults @env/env))
-               db     (conman/connect! (squeeze/remove-key-prefix :db- config))]
+               db     (conman/connect! (merge (squeeze/remove-key-prefix :db- config)
+                                              {:connection-init-sql "SET search_path TO {{prefix}}_data;"}))]
+           (migratus/init (merge migratus-config {:db db}))
            (migratus/migrate (merge migratus-config {:db db}))
            db)
   :stop (conman/disconnect! @*db*))
+
+(defmacro with-transaction [& body]
+  `(conman/with-transaction [*db*]
+     ~@body))
 
 (conman/bind-connection-deref *db* "db/queries.sql")
 
@@ -38,7 +46,7 @@
   (delete-memory! {:id "1"})
 
   ;; Transaction example
-  (conman/with-transaction [*db*]
+  (with-transaction
     (jdbc/db-set-rollback-only! @*db*)
     (create-memory! {:id "2" :memory-text "foo"})
     (get-memory {:id "2"}))

@@ -23,11 +23,11 @@ run-test() {
     popd
 }
 
-run-test org.example/foo-bar1
-run-test org.example/foo-bar2 +http
-run-test org.example/foo-bar3 +db
-run-test org.example/foo-bar4 +swagger1st
-run-test org.example/foo-bar5 +all
+run-test org.example/foo-bar1 +all
+run-test org.example/foo-bar2
+run-test org.example/foo-bar3 +http
+run-test org.example/foo-bar4 +db
+run-test org.example/foo-bar5 +swagger1st
 run-test org.example/foo-bar6 +swagger1st-oauth2
 
 # Just in case we want to try it outside of target/
