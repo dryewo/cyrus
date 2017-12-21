@@ -2,7 +2,9 @@
   (:require [cheshire.core :as json]
             [clojure.java.jdbc :as jdbc]
             [camel-snake-kebab.core :as csk]
-            [migratus.core :as migratus])
+            [migratus.core :as migratus]
+            [hugsql.adapter]
+            [hugsql.core])
   (:import org.postgresql.util.PGobject
            clojure.lang.IPersistentMap
            clojure.lang.IPersistentVector
