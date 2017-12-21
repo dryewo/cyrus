@@ -2,22 +2,37 @@
   (:require [taoensso.timbre :as timbre]
             [taoensso.encore :as enc]
             [io.aviso.exception :as aviso-ex]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [cheshire.core :as json]
+            [clojure.tools.logging :as clojure-logging]))
 
-(defmacro trace [& args]
-  `(timbre/tracef ~@args))
+(defn format-log-message
+  "Similar to `format`, but uses JSON representation of values.
+   Expects only %s in the format string."
+  [fmt & args]
+  (apply format fmt (map json/encode args)))
 
-(defmacro debug [& args]
-  `(timbre/debugf ~@args))
+(defmacro logf
+  "Logs a message, formatted with clear distinction for dynamic values."
+  [level throwable message & more]
+  `(when (clojure-logging/enabled? ~level)
+     (let [msg# (format-log-message ~message ~@more)]
+       (clojure-logging/log ~level ~throwable msg#))))
 
-(defmacro info [& args]
-  `(timbre/infof ~@args))
+(defmacro trace [message & args]
+  `(logf :trace nil ~message ~@args))
 
-(defmacro warn [& args]
-  `(timbre/warnf ~@args))
+(defmacro debug [message & args]
+  `(logf :debug nil ~message ~@args))
 
-(defmacro error [& args]
-  `(timbre/errorf ~@args))
+(defmacro info [message & args]
+  `(logf :info nil ~message ~@args))
+
+(defmacro warn [message & args]
+  `(logf :warn nil ~message ~@args))
+
+(defmacro error [throwable message & args]
+  `(logf :error ~throwable (str ~message "\n") ~@args))
 
 (defn make-colorless-appender [appender]
   (update appender :fn

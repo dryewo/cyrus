@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.fzakaria/slf4j-timbre "0.3.8"]
+                 [org.clojure/tools.logging "0.4.0"]
+                 [cheshire "5.8.0"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
                  [squeeze "0.1.1"]{{#nrepl}}
@@ -20,7 +22,6 @@
                  [fahrscheine-bitte "0.2.0"]{{/swagger1st-oauth2}}{{#db}}
                  [conman "0.7.4"]
                  [org.postgresql/postgresql "42.1.4"]
-                 [cheshire "5.8.0"]
                  [camel-snake-kebab "0.4.0"]
                  [migratus "1.0.2"]{{/db}}]
   :main ^:skip-aot {{namespace}}.core

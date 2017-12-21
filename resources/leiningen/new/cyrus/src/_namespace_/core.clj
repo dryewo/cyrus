@@ -37,7 +37,7 @@
         (System/exit 0))
       @(promise))
     (catch Exception e
-      (log/error e "Could not start the application because of %s." (str e))
+      (log/error e "Could not start the application.")
       (System/exit 1))))
 
 (log/set-ns-log-levels!
