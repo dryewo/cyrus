@@ -10,7 +10,7 @@
                  [cheshire "5.8.0"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
-                 [squeeze "0.1.1"]{{#nrepl}}
+                 [squeeze "0.3.0"]{{#nrepl}}
                  [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
@@ -23,7 +23,7 @@
                  [conman "0.7.4"]
                  [org.postgresql/postgresql "42.1.4"]
                  [camel-snake-kebab "0.4.0"]
-                 [migratus "1.0.2"]{{/db}}]
+                 [migratus "1.0.3"]{{/db}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"
