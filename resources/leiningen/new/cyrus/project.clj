@@ -10,7 +10,7 @@
                  [cheshire "5.8.0"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
-                 [squeeze "0.3.0"]{{#nrepl}}
+                 [squeeze "0.3.1"]{{#nrepl}}
                  [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]
