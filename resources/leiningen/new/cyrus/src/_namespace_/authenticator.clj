@@ -11,10 +11,13 @@
 (s/defschema Config
   {(s/optional-key :tokeninfo-url) s/Str})
 
+(m/defstate config
+  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
+
 ;; Checks if TOKENINFO_URL is set and returns a pass-through handler in case it's not
 ;; Works as a security handler for io.sarnowski.swagger1st.core/protector
 (m/defstate oauth2-s1st-security-handler
-  :start (let [{:keys [tokeninfo-url]} (squeeze/coerce-config Config (merge config-defaults @env/env))]
+  :start (let [{:keys [tokeninfo-url]} @config]
            (if tokeninfo-url
              (let [access-token-resolver-fn (oauth2/make-cached-access-token-resolver tokeninfo-url {})]
                (log/info "Checking OAuth2 access tokens against %s." tokeninfo-url)

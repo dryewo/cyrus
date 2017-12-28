@@ -35,6 +35,9 @@
   (stop)
   (repl/refresh :after 'user/start))
 
+(defn run-tests []
+  (run-all-tests #"{{namespace}}.*-test"))
+
 (defn tests []
   (stop)
   (repl/refresh :after 'user/run-tests))

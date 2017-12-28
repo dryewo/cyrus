@@ -24,6 +24,9 @@
 (s/defschema Config
   {(s/optional-key :http-port) s/Int})
 
+(m/defstate config
+  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
+
 (defn get-hello [req]
   (log/info "Hello")
   {:status 200 :body "Hello" :headers {"Content-type" "text/plain"}})
@@ -82,8 +85,7 @@
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
-           (let [config         (squeeze/coerce-config Config (merge config-defaults @env/env))
-                 started-server (aleph.http/start-server (make-handler) (squeeze/remove-key-prefix :http- config))]
+           (let [started-server (aleph.http/start-server (make-handler) (squeeze/remove-key-prefix :http- @config))]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
   :stop (.close @server))

@@ -17,6 +17,9 @@
    (s/optional-key :db-username) s/Str
    (s/optional-key :db-password) s/Str})
 
+(m/defstate config
+  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
+
 (def migratus-config
   {:store                :database
    :init-script          "init.sql"
@@ -24,9 +27,8 @@
    :migration-dir        "db/migrations"})
 
 (m/defstate ^:dynamic *db*
-  :start (let [config (squeeze/coerce-config Config (merge config-defaults @env/env))
-               db     (conman/connect! (merge (squeeze/remove-key-prefix :db- config)
-                                              {:connection-init-sql "SET search_path TO {{prefix}}_data;"}))]
+  :start (let [db (conman/connect! (merge (squeeze/remove-key-prefix :db- @config)
+                                          {:connection-init-sql "SET search_path TO {{prefix}}_data;"}))]
            (migratus/init (merge migratus-config {:db db}))
            (migratus/migrate (merge migratus-config {:db db}))
            db)
