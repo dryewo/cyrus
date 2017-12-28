@@ -3,13 +3,12 @@
             [clojure.pprint :refer [pprint]]
             [clojure.reflect :refer [reflect]]
             [clojure.repl :refer [apropos dir doc find-doc pst source]]
-            [clojure.tools.namespace.repl :refer [refresh refresh-all]]
+            [clojure.tools.namespace.repl :refer [refresh-all] :as repl]
             [clojure.test :refer [run-all-tests]]
-            [mount.core :as m]
-            [clojure.edn :as edn]))
-
-(defn stop []
-  (m/stop))
+            [clojure.edn :as edn]
+            [mount.lite :as m]
+            [mount.extensions.refresh :refer [refresh]]
+            [{{namespace}}.env :as env]))
 
 (defn slurp-if-exists [file]
   (when (.exists (clojure.java.io/as-file file))
@@ -21,16 +20,21 @@
   ([file]
    (edn/read-string (slurp-if-exists file))))
 
+(defn reload-dev-env []
+  (alter-var-root #'env/*env-override* (constantly (load-dev-env))))
+
 (defn start []
-  (m/start-with-args (load-dev-env)))
+  (reload-dev-env)
+  (m/start))
+
+(defn stop []
+  (reload-dev-env)
+  (m/stop))
 
 (defn reset []
-  (m/stop)
-  (refresh :after 'user/start))
-
-(defn run-tests []
-  (run-all-tests #"{{namespace}}.*-test"))
+  (stop)
+  (repl/refresh :after 'user/start))
 
 (defn tests []
   (stop)
-  (refresh :after 'user/run-tests))
+  (repl/refresh :after 'user/run-tests))

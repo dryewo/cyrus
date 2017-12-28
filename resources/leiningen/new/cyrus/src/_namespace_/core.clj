@@ -1,5 +1,5 @@
 (ns {{namespace}}.core
-  (:require [mount.core :as m]
+  (:require [mount.lite :as m]
             [environ.core :as environ]
             [dovetail.core :as log]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
@@ -8,9 +8,6 @@
   (:gen-class))
 
 ;; HINT: After adding a new defstate restart the REPL
-
-;; Make states explicitly derefable: @server, @*db* @env
-(m/in-cljc-mode)
 
 (defn implementation-version []
   (or
@@ -24,6 +21,7 @@
   (log/set-level! :info)
   (log/set-log-level-from-env! (System/getenv "LOG_LEVEL"))
   (log/info "Starting {{name}} version %s" (implementation-version))
+  (log/info "States found: %s" @m/*states*)
   (try{{#nrepl}}
     (when (= "true" (System/getenv "NREPL_ENABLED"))
       (nrepl/start-nrepl environ/env)){{/nrepl}}
@@ -47,8 +45,11 @@
 (log/set-output-fn! log/default-log-output-fn)
 
 (comment
-  ;; Starting and stopping the application during development{{#nrepl}} and NREPL access{{/nrepl}}
+  (log/set-level! :info)
+  (log/set-level! :debug)
+  ;; Starting and stopping the application during NREPL access
   (m/start)
   (m/stop)
   ;; Override some environment variables
-  (m/start-with-args {:http-port 8888}))
+  (binding [env/*env-override* {:http-port 8888}]
+    (m/start)))

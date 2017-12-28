@@ -5,13 +5,13 @@
 
 Includes:
 
-* [mount] for state management
+* [mount-lite] for state management
 * dev/user.clj for REPL-driven development
-* [timbre] for logging
+* [timbre]+[dovetail] for logging
 * +http: [aleph] + [Compojure] (and [Ring])
 * +db: PostgreSQL, [conman], [migratus], [HugSQL]
 * +[nrepl]: NREPL server for remote debugging
-* +[swagger1st] (RESTful API), includes +http.
+* +[swagger1st] (RESTful API), includes +http
 * Lean configuration management with [squeeze]
 * useful tweaks
 
@@ -32,18 +32,33 @@ Additionally, you can use `+all` option that includes everything.
 
 ## Contents
 
-### State management
+### State management and dependency injection
 
-[mount] is chosen over [component] for its lean spirit and ease of use. Mount runs in `(in-cljc-mode)` to make all
-the states *derefable* (implementing `IDeref`) — that means, you have to explicitly `@` them.
+[mount-lite] is chosen over [component] for its lean spirit and ease of use. While in component you have to explicitly
+define dependencies between parts of the system, mount-lite (and mount) figure this out by scanning namespace declarations.
+This is a great example of DRY (don't repeat yourself) principle.
+
+In mount-lite all states (components) have global names (like normal vars created with `def` or `defn`) and
+are *dereferable* (implementing `IDeref`) — that means, you have to explicitly `@` or `deref` to access them.
+
+[mount-lite] is chosen over [mount], because:
+* mount supports dereferable states via `(in-cljc-mode)`, but when you try to `deref` a stopped state, mount automatically starts it.
+  This leads to surprises and sometimes to impossibility to stop a running system (when you have a background process that
+  accesses some state even after you execute `(m/stop)`. The state just starts again, including the states it depends on).  
+  mount-lite in this case just throws an exception.
+* In mount it is only possible to start a part of the system (for testing it) by explicitly listing
+  states that you need. In mount-lite there is "start-up-to" functionality that automatically figures out
+  which states does this specific state need and starts only them (see examples in tests in a generated project).
 
 ### Logging
 
-* Logging is supported via [timbre]. Additionally, an opinionated format is provided
-via `(lib.logging/default-log-output-fn)`.
-* Overlall log level can be overridden by setting `LOG_LEVEL` environment variable.
-* Log level per namespace is configured in core.clj using `(lib.logging/set-ns-log-levels)!`. The resulting log level 
+Logging is supported via [timbre].  
+Additionally, [dovetail] helper library provides useful tweaks:
+* Log level per namespace is configured in core.clj using `log/set-ns-log-levels!`. The resulting log level 
 per namespace is the higher of global and specific settings.
+* All logging functions support throwable as their first argument.
+* All formatted values (`%s`) are automatically `pr-str`ed. 
+* Overall log level can be overridden by setting `LOG_LEVEL` environment variable.
 
 ### HTTP server
 
@@ -124,12 +139,14 @@ by args given to `(mount/start-with-args)` to allow experimenting with configura
 
 To facilitate REPL-driven development, `user.clj` contains functions, available directly from `user` namespace after REPL is started:
 
-* `(start)`, which calls `(mount/start-with-args)`, giving it contents of `dev-env.edn` file to override the environment (exposed by `env` component).
+* `(start)`, which calls `(m/start)`, first re-reading environment variable overrides from `dev-env.edn`.  
   This is done to enable adjusting environment variables without restarting REPL.
-* `(stop)`, which calls `(mount/stop)`
+* `(stop)`, which calls `(m/stop)`
 * `(reset)`, which calls `(stop)`, `(refresh)` and then `(start)`
 * `(tests)`, which runs all tests in all test namespaces
-* functions from clojure.tools.namespace: `(refresh)`, `(refresh-all)`
+* functions from `clojure.tools.namespace`:
+    * wrapped `(refresh)`, which stops started states before reloading and then starts them again
+    * `(refresh-all)`, which reloads all the code in the project
 
 ## Development
 
@@ -151,7 +168,8 @@ $ ./itest.sh
 
 **Q.** Why another template? There is already [Luminus], which is more feature-rich.  
 **A.** While Luminus is a great project, made with a lot of love, it already carries an opinion, which in some points is 
- different from mine. Also, even without additional options it generates too much (not always you need front-end, configuration management with cprop is IMHO an overkill etc.)
+ different from mine. Also, even without additional options it generates too much (not always you need front-end, configuration 
+ management with cprop is IMHO an overkill etc.)  
  Leiningen templates are not extensible, so I had to make my own, reusing best parts of Luminus.
 
 ## License
@@ -172,7 +190,9 @@ limitations under the License.
 
 [squeeze]: https://github.com/dryewo/squeeze
 [mount]: https://github.com/tolitius/mount
+[mount-lite]: https://github.com/aroemers/mount-lite
 [timbre]: https://github.com/ptaoussanis/timbre
+[dovetail]: https://github.com/dryewo/dovetail
 [aleph]: https://github.com/ztellman/aleph
 [Compojure]: https://github.com/weavejester/compojure
 [Ring]: https://github.com/ring-clojure/ring

@@ -1,5 +1,5 @@
 (ns {{namespace}}.authenticator
-  (:require [mount.core :as m]
+  (:require [mount.lite :as m]
             [schema.core :as s]
             [fahrscheine-bitte.core :as oauth2]
             [squeeze.core :as squeeze]

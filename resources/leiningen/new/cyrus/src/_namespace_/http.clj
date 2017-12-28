@@ -1,5 +1,5 @@
 (ns {{namespace}}.http
-  (:require [mount.core :as m]
+  (:require [mount.lite :as m]
             [schema.core :as s]
             [aleph.http]
             [aleph.netty]

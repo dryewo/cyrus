@@ -1,11 +1,8 @@
 (ns {{namespace}}.env
-  (:require [mount.core :as m]
+  (:require [mount.lite :as m]
             [environ.core]))
 
-(m/defstate env
-  :start (merge environ.core/env (m/args)))
+(defonce ^:dynamic *env-override* nil)
 
-(defn start-with-override [env-override]
-  (-> (m/only [#'env])
-      (m/with-args env-override)
-      (m/start)))
+(m/defstate env
+  :start (merge environ.core/env *env-override*))

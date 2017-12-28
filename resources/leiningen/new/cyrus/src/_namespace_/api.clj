@@ -1,7 +1,7 @@
 (ns {{namespace}}.api
   (:require [io.sarnowski.swagger1st.core :as s1st]
             [io.sarnowski.swagger1st.executor :as s1stexec]
-            [mount.core :as m]
+            [mount.lite :as m]
             [dovetail.core :as log]
             [{{namespace}}.lib.http :as httplib]{{#swagger1st-oauth2}}
             [{{namespace}}.authenticator :as authenticator]{{/swagger1st-oauth2}}))
