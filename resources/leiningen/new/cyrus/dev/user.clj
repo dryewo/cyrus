@@ -6,8 +6,7 @@
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.test :refer [run-all-tests]]
             [mount.core :as m]
-            [clojure.edn :as edn]
-            [{{namespace}}.core :as core]))
+            [clojure.edn :as edn]))
 
 (defn stop []
   (m/stop))

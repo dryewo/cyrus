@@ -1,7 +1,7 @@
 (ns {{namespace}}.core
   (:require [mount.core :as m]
             [environ.core :as environ]
-            [{{namespace}}.lib.logging :as log]{{#nrepl}}
+            [dovetail.core :as log]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}})
@@ -44,7 +44,7 @@
   {"{{namespace}}.*" :debug
    :all :info})
 
-(log/set-default-output-fn!)
+(log/set-output-fn! log/default-log-output-fn)
 
 (comment
   ;; Starting and stopping the application during development{{#nrepl}} and NREPL access{{/nrepl}}

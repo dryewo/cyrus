@@ -64,7 +64,6 @@
        ["dev/user.clj" (render "dev/user.clj" data)]
        ["src/{{nested-dirs}}/core.clj" (render "src/_namespace_/core.clj" data)]
        ["src/{{nested-dirs}}/env.clj" (render "src/_namespace_/env.clj" data)]
-       ["src/{{nested-dirs}}/lib/logging.clj" (render "src/_namespace_/lib/logging.clj" data)]
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        "resources"]
       (when (contains? feature-set "+nrepl")

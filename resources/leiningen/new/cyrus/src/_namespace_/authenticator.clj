@@ -3,7 +3,7 @@
             [schema.core :as s]
             [fahrscheine-bitte.core :as oauth2]
             [squeeze.core :as squeeze]
-            [{{namespace}}.lib.logging :as log]
+            [dovetail.core :as log]
             [{{namespace}}.env :as env]))
 
 (def config-defaults {})

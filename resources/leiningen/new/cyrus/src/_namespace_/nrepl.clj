@@ -2,7 +2,7 @@
   (:require [clojure.tools.nrepl.server :as n]
             [schema.core :as s]
             [squeeze.core :as squeeze]
-            [{{namespace}}.lib.logging :as log]))
+            [dovetail.core :as log]))
 
 (def config-defaults
   {:nrepl-port 55000

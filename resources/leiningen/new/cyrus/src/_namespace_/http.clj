@@ -13,7 +13,7 @@
             [ring.util.response :as resp]
             [manifold.deferred :as md]
             [squeeze.core :as squeeze]
-            [{{namespace}}.lib.logging :as log]
+            [dovetail.core :as log]
             [{{namespace}}.lib.http :as httplib]
             [{{namespace}}.env :as env]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))

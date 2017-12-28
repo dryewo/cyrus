@@ -4,9 +4,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [com.taoensso/timbre "4.10.0"]
-                 [com.fzakaria/slf4j-timbre "0.3.8"]
-                 [org.clojure/tools.logging "0.4.0"]
+                 [cyrus/dovetail "0.1.0"]
                  [cheshire "5.8.0"]
                  [mount "0.1.11"]
                  [environ "1.1.0"]
