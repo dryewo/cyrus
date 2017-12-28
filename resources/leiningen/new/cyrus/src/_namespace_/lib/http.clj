@@ -1,11 +1,11 @@
 (ns {{namespace}}.lib.http
-  (:require [taoensso.timbre :as timbre]))
+  (:require [dovetail.core :as log]))
 
 (defn compute-request-info
   "Creates a nice, readable request info text for logline prefixing."
   [request]
   (str
-    (.toUpperCase (-> request :request-method name))
+    (-> request :request-method name .toUpperCase)
     " "
     (:uri request)
     " <- "
@@ -20,6 +20,5 @@
   [next-handler]
   (fn [request]
     (let [request-info (compute-request-info request)]
-      (timbre/with-context
-        {:request (str " [" request-info "]")}
+      (log/with-context (str " [" request-info "]")
         (next-handler request)))))
