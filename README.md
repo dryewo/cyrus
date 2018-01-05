@@ -12,7 +12,7 @@ Includes:
 * +db: PostgreSQL, [conman], [migratus], [HugSQL]
 * +[nrepl]: NREPL server for remote debugging
 * +[swagger1st] (RESTful API), includes +http
-* Lean configuration management with [squeeze]
+* [Twelve-Factor App] configuration management with [cyrus-config]
 * useful tweaks
 
 Roadmap:
@@ -106,34 +106,37 @@ by setting `NREPL_ENABLED=true`. Default port is `55000`, can be changed by sett
 
 ### Configuration management
 
-The app can only be configured through environment variables (following [Twelve-Factor App manifesto]).
-Each component defines its own schema ([prismatic/schema]), which is used to 
-validate and coerce (using [squeeze]) the selected environment variables into it during component start-up:
-
-Having a schema like this:
-```clj
-(s/defschema Config
-  {(s/optional-key :http-port)            s/Int
-   (s/optional-key :http-whitelisted-ips) [s/Str]})
-```
-
-Only mentioned environment variables are selected and transformed according to the schema:
-
-```
-HTTP_PORT=7777
-HTTP_WHITELISTED_IPS="[1.2.3.4, 4.3.2.1]"
-HTTP_UNKNOWN=nfrjbqogpq-u8y7894yr984gbl
-```
-
-yields:
+The app can only be configured through environment variables (following [Twelve-Factor App] manifesto).
+Each environment variable has a corresponding `cfg/def`, which makes a checked and conformed value of that variable
+available as a global constant (var):
 
 ```clj
-{:http-port            7777                    ; parsed as Int
- :http-whitelisted-ips ["1.2.3.4" "4.3.2.1"]   ; parsed as YAML
+(cfg/def port {:info     "Port for HTTP server to listen on."
+               :var-name "HTTP_PORT"
+               :spec     int?
+               :default  8090})
 ```
 
-The environment is read from [environ] on the component start and overridden
-by args given to `(mount/start-with-args)` to allow experimenting with configuration without restarting REPL every time.
+On application startup all defined configuration constants are checked for validation errors and a summary is printed to console:
+
+```
+ INFO [main] f-b.core - Config loaded:
+#'foo-bar1.nrepl/bind: "0.0.0.0" from NREPL_BIND in :default // Network interface for NREPL server to bind to.
+#'foo-bar1.nrepl/port: 55000 from NREPL_PORT in :default // Port for NREPL server to listen on.
+#'foo-bar1.http/port: 8090 from HTTP_PORT in :default // Port for HTTP server to listen on.
+#'foo-bar1.db/password: <SECRET> because DB_PASSWORD is not set // Database password.
+#'foo-bar1.db/username: "postgres" from DB_USERNAME in :default // Database username.
+#'foo-bar1.db/jdbc-url: "jdbc:postgresql://localhost:5432/postgres" from DB_JDBC_URL in :default // Coordinates of the database. Should start with `jdbc:postgresql://`.
+#'foo-bar1.authenticator/tokeninfo-url: nil because TOKENINFO_URL is not set // URL to check access tokens against. If not set, tokens won't be checked.
+```
+
+For REPL-driven development a function is provided to override some configuration constants without restarting the REPL:
+
+```clj
+(cfg/reload-with-override! {"HTTP_PORT" 8888})
+```
+
+Please refer to the full documentation on [cyrus-config] home page.
 
 ### user.clj
 
@@ -141,7 +144,7 @@ To facilitate REPL-driven development, `user.clj` contains functions, available 
 
 * `(start)`, which calls `(m/start)`, first re-reading environment variable overrides from `dev-env.edn`.  
   This is done to enable adjusting environment variables without restarting REPL.
-* `(stop)`, which calls `(m/stop)`
+* `(stop)`, which calls `(m/stop)`  (and just in case reloads configuration too).
 * `(reset)`, which calls `(stop)`, `(refresh)` and then `(start)`
 * `(tests)`, which runs all tests in all test namespaces
 * functions from `clojure.tools.namespace`:
@@ -189,6 +192,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 [squeeze]: https://github.com/dryewo/squeeze
+[cyrus-config]: https://github.com/dryewo/cyrus-config
 [mount]: https://github.com/tolitius/mount
 [mount-lite]: https://github.com/aroemers/mount-lite
 [timbre]: https://github.com/ptaoussanis/timbre
@@ -204,7 +208,7 @@ limitations under the License.
 [Hystrix]: https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-clj
 [component]: https://github.com/stuartsierra/component
 [OpenAPI]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
-[Twelve-Factor App manifesto]: https://12factor.net/config
+[Twelve-Factor App]: https://12factor.net/config
 [prismatic/schema]: https://github.com/plumatic/schema
 [environ]: https://github.com/weavejester/environ
 [Luminus]: https://github.com/luminus-framework/luminus-template

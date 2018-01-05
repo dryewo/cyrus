@@ -2,11 +2,11 @@
   (:require [clojure.test :refer :all]{{#db}}
             [clojure.java.jdbc :as jdbc]{{/db}}
             [mount.extensions.namespace-deps :as mnd]
-            [{{namespace}}.env :as env]))
+            [cyrus-config.core :as cfg]))
 
 (defn start-with-env-override [env-override & args]
-  (binding [env/*env-override* env-override]
-    (apply mnd/start args)))
+  (cfg/reload-with-override! env-override)
+  (apply mnd/start args))
 {{#db}}
 
 (defn wipe-db [db]

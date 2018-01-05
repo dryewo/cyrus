@@ -1,13 +1,13 @@
 (ns {{namespace}}.core
   (:require [mount.lite :as m]
-            [environ.core :as environ]
-            [dovetail.core :as log]{{#nrepl}}
+            [dovetail.core :as log]
+            [cyrus-config.core :as cfg]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}})
   (:gen-class))
 
-;; HINT: After adding a new defstate restart the REPL
+;; HINT: After adding or removing a defstate restart the REPL
 
 (defn implementation-version []
   (or
@@ -22,9 +22,11 @@
   (log/set-log-level-from-env! (System/getenv "LOG_LEVEL"))
   (log/info "Starting {{name}} version %s" (implementation-version))
   (log/info "States found: %s" @m/*states*)
-  (try{{#nrepl}}
+  (try
+    (cfg/validate!)
+    (log/info (str "Config loaded:\n" (cfg/show))){{#nrepl}}
     (when (= "true" (System/getenv "NREPL_ENABLED"))
-      (nrepl/start-nrepl environ/env)){{/nrepl}}
+      (nrepl/start-nrepl)){{/nrepl}}
     (m/start)
     (log/info "Application started")
     ;; Prevent -main from exiting to keep the application running, unless it's a special test run
@@ -40,6 +42,7 @@
 
 (log/set-ns-log-levels!
   {"{{namespace}}.*" :debug
+   "com.zaxxer.hikari.*" :warn
    :all :info})
 
 (log/set-output-fn! log/default-log-output-fn)
@@ -51,5 +54,4 @@
   (m/start)
   (m/stop)
   ;; Override some environment variables
-  (binding [env/*env-override* {:http-port 8888}]
-    (m/start)))
+  (cfg/reload-with-override! {"HTTP_PORT" 8888}))

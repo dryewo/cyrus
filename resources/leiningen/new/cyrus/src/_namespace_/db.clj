@@ -4,21 +4,20 @@
             [schema.core :as s]
             [migratus.core :as migratus]
             [clojure.java.jdbc :as jdbc]
-            [squeeze.core :as squeeze]
-            [{{namespace}}.lib.db]
-            [{{namespace}}.env :as env]))
+            [cyrus-config.core :as cfg]
+            [dovetail.core :as log]
+            [{{namespace}}.lib.db]))
 
-(def config-defaults
-  {:db-jdbc-url "jdbc:postgresql://localhost:5432/postgres"
-   :db-username "postgres"})
+(cfg/def jdbc-url {:info     "Coordinates of the database. Should start with `jdbc:postgresql://`."
+                   :default  "jdbc:postgresql://localhost:5432/postgres"
+                   :var-name "DB_JDBC_URL"})
+(cfg/def username {:info     "Database username."
+                   :default  "postgres"
+                   :var-name "DB_USERNAME"})
+(cfg/def password {:info     "Database password."
+                   :var-name "DB_PASSWORD"
+                   :secret   true})
 
-(s/defschema Config
-  {(s/optional-key :db-jdbc-url) s/Str
-   (s/optional-key :db-username) s/Str
-   (s/optional-key :db-password) s/Str})
-
-(m/defstate config
-  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
 
 (def migratus-config
   {:store                :database
@@ -27,11 +26,15 @@
    :migration-dir        "db/migrations"})
 
 (m/defstate ^:dynamic *db*
-  :start (let [db (conman/connect! (merge (squeeze/remove-key-prefix :db- @config)
-                                          {:connection-init-sql "SET search_path TO {{prefix}}_data;"}))]
-           (migratus/init (merge migratus-config {:db db}))
-           (migratus/migrate (merge migratus-config {:db db}))
-           db)
+  :start (do
+           (log/info "Starting DB connection pool.")
+           (let [db (conman/connect! {:jdbc-url            jdbc-url
+                                      :username            username
+                                      :password            password
+                                      :connection-init-sql "SET search_path TO c_data;"})]
+             (migratus/init (merge migratus-config {:db db}))
+             (migratus/migrate (merge migratus-config {:db db}))
+             db))
   :stop (conman/disconnect! @*db*))
 
 (defmacro with-transaction [& body]

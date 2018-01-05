@@ -63,7 +63,6 @@
        ["dev-env.edn" (render "dev-env.edn" data)]
        ["dev/user.clj" (render "dev/user.clj" data)]
        ["src/{{nested-dirs}}/core.clj" (render "src/_namespace_/core.clj" data)]
-       ["src/{{nested-dirs}}/env.clj" (render "src/_namespace_/env.clj" data)]
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        ["test/{{nested-dirs}}/test_utils.clj" (render "test/_namespace_/test_utils.clj" data)]
        "resources"]

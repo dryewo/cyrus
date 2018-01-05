@@ -1,16 +1,15 @@
 (ns {{namespace}}.nrepl
   (:require [clojure.tools.nrepl.server :as n]
-            [schema.core :as s]
-            [squeeze.core :as squeeze]
-            [dovetail.core :as log]))
+            [dovetail.core :as log]
+            [cyrus-config.core :as cfg]))
 
-(def config-defaults
-  {:nrepl-port 55000
-   :nrepl-bind "0.0.0.0"})
-
-(s/defschema Config
-  {(s/optional-key :nrepl-port) s/Int
-   (s/optional-key :nrepl-bind) s/Str})
+(cfg/def port {:info     "Port for NREPL server to listen on."
+               :spec     int?
+               :var-name "NREPL_PORT"
+               :default  55000})
+(cfg/def bind {:info     "Network interface for NREPL server to bind to."
+               :var-name "NREPL_BIND"
+               :default  "0.0.0.0"})
 
 (defn flatten1
   "Flattens the collection one level, for example,
@@ -22,10 +21,9 @@
 ;; NREPL server - has to be outside components managed by mount to allow restarting
 (defonce nrepl-server nil)
 
-(defn start-nrepl [env]
+(defn start-nrepl []
   (log/info "Starting NREPL server")
-  (let [config         (squeeze/coerce-config Config (merge config-defaults env))
-        started-server (apply n/start-server (flatten1 (squeeze/remove-key-prefix :nrepl- config)))]
+  (let [started-server (apply n/start-server (flatten1 {:port port :bind bind}))]
     (log/info "NREPL server is listening on %s" (str (:server-socket started-server)))
     (alter-var-root #'nrepl-server (constantly started-server))))
 

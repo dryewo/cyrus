@@ -1,31 +1,22 @@
 (ns {{namespace}}.authenticator
   (:require [mount.lite :as m]
-            [schema.core :as s]
             [fahrscheine-bitte.core :as oauth2]
-            [squeeze.core :as squeeze]
             [dovetail.core :as log]
-            [{{namespace}}.env :as env]))
+            [cyrus-config.core :as cfg]))
 
-(def config-defaults {})
-
-(s/defschema Config
-  {(s/optional-key :tokeninfo-url) s/Str})
-
-(m/defstate config
-  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
+(cfg/def tokeninfo-url {:info "URL to check access tokens against. If not set, tokens won't be checked."})
 
 ;; Checks if TOKENINFO_URL is set and returns a pass-through handler in case it's not
 ;; Works as a security handler for io.sarnowski.swagger1st.core/protector
 (m/defstate oauth2-s1st-security-handler
-  :start (let [{:keys [tokeninfo-url]} @config]
-           (if tokeninfo-url
-             (let [access-token-resolver-fn (oauth2/make-cached-access-token-resolver tokeninfo-url {})]
-               (log/info "Checking OAuth2 access tokens against %s." tokeninfo-url)
-               (oauth2/make-oauth2-s1st-security-handler access-token-resolver-fn oauth2/check-corresponding-attributes))
-             (do
-               (log/warn "No TOKENINFO_URL set; NOT ENFORCING SECURITY!")
-               (fn [request definition requirements]
-                 request)))))
+  :start (if tokeninfo-url
+           (let [access-token-resolver-fn (oauth2/make-cached-access-token-resolver tokeninfo-url {})]
+             (log/info "Checking OAuth2 access tokens against %s." tokeninfo-url)
+             (oauth2/make-oauth2-s1st-security-handler access-token-resolver-fn oauth2/check-corresponding-attributes))
+           (do
+             (log/warn "No TOKENINFO_URL set; NOT ENFORCING SECURITY!")
+             (fn [request definition requirements]
+               request))))
 
 (defn log-access-denied-reason [reason]
   (log/info "Access denied: %s" reason))

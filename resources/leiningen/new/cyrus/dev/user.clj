@@ -8,7 +8,7 @@
             [clojure.edn :as edn]
             [mount.lite :as m]
             [mount.extensions.refresh :refer [refresh]]
-            [{{namespace}}.env :as env]))
+            [cyrus-config.core :as cfg]))
 
 (defn slurp-if-exists [file]
   (when (.exists (clojure.java.io/as-file file))
@@ -21,10 +21,12 @@
    (edn/read-string (slurp-if-exists file))))
 
 (defn reload-dev-env []
-  (alter-var-root #'env/*env-override* (constantly (load-dev-env))))
+  (cfg/reload-with-override! (load-dev-env))
+  (cfg/validate!))
 
 (defn start []
   (reload-dev-env)
+  (println (str "Config loaded:\n" (cfg/show)))
   (m/start))
 
 (defn stop []

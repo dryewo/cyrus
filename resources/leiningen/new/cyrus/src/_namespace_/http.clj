@@ -1,6 +1,5 @@
 (ns {{namespace}}.http
   (:require [mount.lite :as m]
-            [schema.core :as s]
             [aleph.http]
             [aleph.netty]
             [compojure.core :refer :all]
@@ -12,20 +11,15 @@
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.util.response :as resp]
             [manifold.deferred :as md]
-            [squeeze.core :as squeeze]
             [dovetail.core :as log]
-            [{{namespace}}.lib.http :as httplib]
-            [{{namespace}}.env :as env]{{#swagger1st}}
+            [cyrus-config.core :as cfg]
+            [{{namespace}}.lib.http :as httplib]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))
 
-(def config-defaults
-  {:http-port 8090})
-
-(s/defschema Config
-  {(s/optional-key :http-port) s/Int})
-
-(m/defstate config
-  :start (squeeze/coerce-config Config (merge config-defaults @env/env)))
+(cfg/def port {:info     "Port for HTTP server to listen on."
+               :var-name "HTTP_PORT"
+               :spec     int?
+               :default  8090})
 
 (defn get-hello [req]
   (log/info "Hello")
@@ -85,7 +79,7 @@
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
-           (let [started-server (aleph.http/start-server (make-handler) (squeeze/remove-key-prefix :http- @config))]
+           (let [started-server (aleph.http/start-server (make-handler) {:port port})]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
   :stop (.close @server))
