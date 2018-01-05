@@ -120,14 +120,14 @@ available as a global constant (var):
 On application startup all defined configuration constants are checked for validation errors and a summary is printed to console:
 
 ```
- INFO [main] f-b.core - Config loaded:
-#'foo-bar1.nrepl/bind: "0.0.0.0" from NREPL_BIND in :default // Network interface for NREPL server to bind to.
-#'foo-bar1.nrepl/port: 55000 from NREPL_PORT in :default // Port for NREPL server to listen on.
-#'foo-bar1.http/port: 8090 from HTTP_PORT in :default // Port for HTTP server to listen on.
-#'foo-bar1.db/password: <SECRET> because DB_PASSWORD is not set // Database password.
-#'foo-bar1.db/username: "postgres" from DB_USERNAME in :default // Database username.
-#'foo-bar1.db/jdbc-url: "jdbc:postgresql://localhost:5432/postgres" from DB_JDBC_URL in :default // Coordinates of the database. Should start with `jdbc:postgresql://`.
-#'foo-bar1.authenticator/tokeninfo-url: nil because TOKENINFO_URL is not set // URL to check access tokens against. If not set, tokens won't be checked.
+ INFO [main] m.core - Config loaded:
+#'my.nrepl/bind: "0.0.0.0" from NREPL_BIND in :default // Network interface for NREPL server to bind to.
+#'my.nrepl/port: 55000 from NREPL_PORT in :default // Port for NREPL server to listen on.
+#'my.http/port: 8090 from HTTP_PORT in :default // Port for HTTP server to listen on.
+#'my.db/password: <SECRET> because DB_PASSWORD is not set // Database password.
+#'my.db/username: "postgres" from DB_USERNAME in :default // Database username.
+#'my.db/jdbc-url: "jdbc:postgresql://localhost:5432/postgres" from DB_JDBC_URL in :default // Coordinates of the database. Should start with `jdbc:postgresql://`.
+#'my.authenticator/tokeninfo-url: nil because TOKENINFO_URL is not set // URL to check access tokens against. If not set, tokens won't be checked.
 ```
 
 For REPL-driven development a function is provided to override some configuration constants without restarting the REPL:
