@@ -16,8 +16,8 @@
             [{{namespace}}.lib.http :as httplib]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))
 
-(cfg/def port {:info     "Port for HTTP server to listen on."
-               :var-name "HTTP_PORT"
+(cfg/def port "Port for HTTP server to listen on."
+              {:var-name "HTTP_PORT"
                :spec     int?
                :default  8090})
 

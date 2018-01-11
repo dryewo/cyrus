@@ -20,17 +20,14 @@
   ([file]
    (edn/read-string (slurp-if-exists file))))
 
-(defn reload-dev-env []
-  (cfg/reload-with-override! (load-dev-env))
-  (cfg/validate!))
-
 (defn start []
-  (reload-dev-env)
+  (cfg/reload-with-override! (load-dev-env))
+  (cfg/validate!)
   (println (str "Config loaded:\n" (cfg/show)))
   (m/start))
 
 (defn stop []
-  (reload-dev-env)
+  (cfg/reload-with-override! (load-dev-env))
   (m/stop))
 
 (defn reset []

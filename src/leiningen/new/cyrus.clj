@@ -16,6 +16,10 @@
 (defn timestamp []
   (.format (SimpleDateFormat. "yyyyMMddHHmmss") (Date.)))
 
+(defn feature-flags [feature-set]
+  (into {} (for [f feature-set]
+             [(-> f (str/replace "+" "") keyword) true])))
+
 (defn prepare-data
   ([name]
    (prepare-data name #{}))
@@ -31,16 +35,7 @@
         :year        (year)
         :date        (date)
         :now-ts      (timestamp)}
-       (when (contains? feature-set "+nrepl")
-         {:nrepl true})
-       (when (contains? feature-set "+http")
-         {:http true})
-       (when (contains? feature-set "+swagger1st")
-         {:swagger1st true})
-       (when (contains? feature-set "+swagger1st-oauth2")
-         {:swagger1st-oauth2 true})
-       (when (contains? feature-set "+db")
-         {:db true})))))
+       (feature-flags feature-set)))))
 
 (defn prepare-files
   "Generates arguments for ->files. Extracted for testing."
@@ -66,19 +61,19 @@
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        ["test/{{nested-dirs}}/test_utils.clj" (render "test/_namespace_/test_utils.clj" data)]
        "resources"]
-      (when (contains? feature-set "+nrepl")
+      (when (:nrepl data)
         [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
-      (when (contains? feature-set "+swagger1st")
+      (when (:swagger1st data)
         [["resources/api.yaml" (render "resources/api.yaml" data)]
          ["src/{{nested-dirs}}/api.clj" (render "src/_namespace_/api.clj" data)]
          ["test/{{nested-dirs}}/api_test.clj" (render "test/_namespace_/api_test.clj" data)]])
-      (when (contains? feature-set "+swagger1st-oauth2")
+      (when (:swagger1st-oauth2 data)
         [["src/{{nested-dirs}}/authenticator.clj" (render "src/_namespace_/authenticator.clj" data)]])
-      (when (contains? feature-set "+http")
+      (when (:http data)
         [["src/{{nested-dirs}}/http.clj" (render "src/_namespace_/http.clj" data)]
          ["test/{{nested-dirs}}/http_test.clj" (render "test/_namespace_/http_test.clj" data)]
          ["src/{{nested-dirs}}/lib/http.clj" (render "src/_namespace_/lib/http.clj" data)]])
-      (when (contains? feature-set "+db")
+      (when (:db data)
         [["src/{{nested-dirs}}/lib/db.clj" (render "src/_namespace_/lib/db.clj" data)]
          ["src/{{nested-dirs}}/db.clj" (render "src/_namespace_/db.clj" data)]
          ["test/{{nested-dirs}}/db_test.clj" (render "test/_namespace_/db_test.clj" data)]

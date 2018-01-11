@@ -8,14 +8,14 @@
             [dovetail.core :as log]
             [{{namespace}}.lib.db]))
 
-(cfg/def jdbc-url {:info     "Coordinates of the database. Should start with `jdbc:postgresql://`."
-                   :default  "jdbc:postgresql://localhost:5432/postgres"
+(cfg/def jdbc-url "Coordinates of the database. Should start with `jdbc:postgresql://`."
+                  {:default  "jdbc:postgresql://localhost:5432/postgres"
                    :var-name "DB_JDBC_URL"})
-(cfg/def username {:info     "Database username."
-                   :default  "postgres"
+(cfg/def username "Database username."
+                  {:default  "postgres"
                    :var-name "DB_USERNAME"})
-(cfg/def password {:info     "Database password."
-                   :var-name "DB_PASSWORD"
+(cfg/def password "Database password."
+                  {:var-name "DB_PASSWORD"
                    :secret   true})
 
 

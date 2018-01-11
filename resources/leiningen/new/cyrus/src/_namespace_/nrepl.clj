@@ -3,13 +3,13 @@
             [dovetail.core :as log]
             [cyrus-config.core :as cfg]))
 
-(cfg/def port {:info     "Port for NREPL server to listen on."
-               :spec     int?
-               :var-name "NREPL_PORT"
-               :default  55000})
-(cfg/def bind {:info     "Network interface for NREPL server to bind to."
-               :var-name "NREPL_BIND"
-               :default  "0.0.0.0"})
+(cfg/def port "Port for NREPL server to listen on."
+              {:spec     int?
+               :default  55000
+               :var-name "NREPL_PORT"})
+(cfg/def bind "Network interface for NREPL server to bind to."
+              {:default  "0.0.0.0"
+               :var-name "NREPL_BIND"})
 
 (defn flatten1
   "Flattens the collection one level, for example,

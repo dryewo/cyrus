@@ -16,16 +16,20 @@
     ;; When running as `java -jar ...`
     (-> (eval '{{package}}.core) .getPackage .getImplementationVersion)))
 
+(cfg/def log-level)
+(cfg/def nrepl-enabled {:spec boolean?})
+(cfg/def test-timeout {:spec int?})
+
 (defn -main [& args]
   (log/disable-console-logging-colors)
   (log/set-level! :info)
-  (log/set-log-level-from-env! (System/getenv "LOG_LEVEL"))
+  (log/set-log-level-from-env! log-level)
   (log/info "Starting {{name}} version %s" (implementation-version))
   (log/info "States found: %s" @m/*states*)
   (try
     (cfg/validate!)
     (log/info (str "Config loaded:\n" (cfg/show))){{#nrepl}}
-    (when (= "true" (System/getenv "NREPL_ENABLED"))
+    (when nrepl-enabled
       (nrepl/start-nrepl)){{/nrepl}}
     (m/start)
     (log/info "Application started")

@@ -4,7 +4,7 @@
             [dovetail.core :as log]
             [cyrus-config.core :as cfg]))
 
-(cfg/def tokeninfo-url {:info "URL to check access tokens against. If not set, tokens won't be checked."})
+(cfg/def tokeninfo-url "URL to check access tokens against. If not set, tokens won't be checked.")
 
 ;; Checks if TOKENINFO_URL is set and returns a pass-through handler in case it's not
 ;; Works as a security handler for io.sarnowski.swagger1st.core/protector
