@@ -111,8 +111,8 @@ Each environment variable has a corresponding `cfg/def`, which makes a checked a
 available as a global constant (var):
 
 ```clj
-(cfg/def port {:info     "Port for HTTP server to listen on."
-               :var-name "HTTP_PORT"
+(cfg/def port "Port for HTTP server to listen on."
+              {:var-name "HTTP_PORT"
                :spec     int?
                :default  8090})
 ```
