@@ -17,8 +17,8 @@
     (-> (eval '{{package}}.core) .getPackage .getImplementationVersion)))
 
 (cfg/def log-level)
-(cfg/def nrepl-enabled {:spec boolean?})
-(cfg/def test-timeout {:spec int?})
+(cfg/def nrepl-enabled {:spec boolean?}){{#debug}}
+(cfg/def test-timeout {:spec int?}){{/debug}}
 
 (defn -main [& args]
   (log/disable-console-logging-colors)
@@ -32,14 +32,16 @@
     (when nrepl-enabled
       (nrepl/start-nrepl)){{/nrepl}}
     (m/start)
-    (log/info "Application started")
+    (log/info "Application started"){{#debug}}
     ;; Prevent -main from exiting to keep the application running, unless it's a special test run
-    (if-let [test-timeout (System/getenv "TEST_TIMEOUT")]
+    (if test-timeout
       (do
         (log/warn "Test mode: terminating after %s ms" test-timeout)
-        (Thread/sleep (bigint test-timeout))
+        (Thread/sleep test-timeout)
         (System/exit 0))
-      @(promise))
+      @(promise)){{/debug}}{{^debug}}
+    ;; Prevent -main from exiting to keep the application running
+    @(promise){{/debug}}
     (catch Exception e
       (log/error e "Could not start the application.")
       (System/exit 1))))

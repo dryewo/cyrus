@@ -34,7 +34,8 @@
         :prefix      (prefix (project-name name))
         :year        (year)
         :date        (date)
-        :now-ts      (timestamp)}
+        :now-ts      (timestamp)
+        :debug       (System/getenv "DEBUG")}
        (feature-flags feature-set)))))
 
 (defn prepare-files
