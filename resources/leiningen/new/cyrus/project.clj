@@ -7,7 +7,7 @@
                  [cyrus/dovetail "0.2.0"]
                  [cheshire "5.8.0"]
                  [functionalbytes/mount-lite "2.1.1"]
-                 [cyrus/config "0.2.0"]{{#nrepl}}
+                 [cyrus/config "0.2.1"]{{#nrepl}}
                  [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.4"]
                  [compojure "1.6.0"]

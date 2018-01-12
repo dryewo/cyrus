@@ -6,7 +6,7 @@
             [clojure.java.jdbc :as jdbc]
             [cyrus-config.core :as cfg]
             [dovetail.core :as log]
-            [{{namespace}}.lib.db]))
+            [{{namespace}}.lib.db :as dblib]))
 
 (cfg/def jdbc-url "Coordinates of the database. Should start with `jdbc:postgresql://`."
                   {:default  "jdbc:postgresql://localhost:5432/postgres"
@@ -45,25 +45,18 @@
   `(conman/with-transaction [*db* ~opts]
      ~@body))
 
-(defn pg-advisory-xact-lock [db lock-id]
-  (jdbc/query db ["SELECT pg_advisory_xact_lock(?);" lock-id]))
-
-(defn pg-try-advisory-xact-lock [db lock-id]
-  (-> (jdbc/query db ["SELECT pg_try_advisory_xact_lock(?);" lock-id])
-      first :pg_try_advisory_xact_lock))
-
 (defmacro with-pg-advisory-xact-lock
   "Acquires transaction level lock in the DB. If the lock is taken, waits until it's available."
   [lock-id & body]
   `(jdbc/with-db-transaction [tx# @*db*]
-     (pg-advisory-xact-lock tx# ~lock-id)
+     (dblib/pg-advisory-xact-lock tx# ~lock-id)
      ~@body))
 
 (defmacro with-try-advisory-xact-lock
   "Acquires transaction level lock in the DB and returns true. If the lock is taken, returns false immediately."
   [lock-id & body]
   `(jdbc/with-db-transaction [tx# @*db*]
-     (when (pg-try-advisory-xact-lock tx# ~lock-id)
+     (when (dblib/pg-try-advisory-xact-lock tx# ~lock-id)
        ~@body)))
 
 (conman/bind-connection-deref *db* "db/queries.sql")

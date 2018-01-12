@@ -88,3 +88,17 @@
 (defmethod hugsql.core/hugsql-result-fn :many [sym] '{{namespace}}.lib.db/result-many-snake->kebab)
 (defmethod hugsql.core/hugsql-result-fn :raw [sym] '{{namespace}}.lib.db/result-raw-snake->kebab)
 (defmethod hugsql.core/hugsql-result-fn :default [sym] '{{namespace}}.lib.db/result-raw-snake->kebab)
+
+
+(defn pg-advisory-xact-lock
+  "Acquires transaction level lock in the DB. If the lock is taken, waits until it's available."
+  [db lock-id]
+  (jdbc/query db ["SELECT pg_advisory_xact_lock(?);" lock-id]))
+
+
+(defn pg-try-advisory-xact-lock
+  "Acquires transaction level lock in the DB and returns true. If the lock is taken, returns false immediately."
+  [db lock-id]
+  (-> (jdbc/query db ["SELECT pg_try_advisory_xact_lock(?);" lock-id])
+      first
+      :pg_try_advisory_xact_lock))
