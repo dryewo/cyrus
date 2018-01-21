@@ -3,7 +3,7 @@
             [mount.lite :as m]
             [dovetail.core :as log]
             [clojure.string :as str]
-            [clojure.java.shell]
+            [clojure.java.shell :as shell]
             [clj-nakadi-java.core :as nakadi]))
 
 
@@ -12,7 +12,7 @@
 
 
 (m/defstate access-token
-  :start (-> (clojure.java.shell/sh "ztoken") :out str/trim))
+  :start "" #_(-> (shell/sh "ztoken") :out str/trim))
 
 
 (m/defstate client
