@@ -13,6 +13,7 @@
            java.sql.BatchUpdateException
            java.sql.PreparedStatement))
 
+
 ;; Conversion when getting from JDBC
 (extend-protocol jdbc/IResultSetReadColumn
   Array
@@ -32,10 +33,12 @@
   ;  (tc/from-sql-time val))
   )
 
+
 (defn to-pg-json [value]
   (doto (PGobject.)
     (.setType "jsonb")
     (.setValue (json/generate-string value))))
+
 
 ;; Conversion when passing to JDBC
 (extend-protocol jdbc/ISQLParameter
@@ -47,6 +50,7 @@
       (if-let [elem-type (when (= (first type-name) \_) (apply str (rest type-name)))]
         (.setObject stmt idx (.createArrayOf conn elem-type (to-array v)))
         (.setObject stmt idx (to-pg-json v))))))
+
 
 ;; Conversion when passing to JDBC
 (extend-protocol jdbc/ISQLValue
@@ -62,7 +66,9 @@
   ;  (tc/to-sql-time v))
   )
 
+
 ;; ## This enables automatic case conversion to kebab-case so that no snake_case needs to be used in application code
+
 
 (defn ->kebab-case-keyword-top-level [coll]
   (if (or (seq? coll) (map? coll))
@@ -70,17 +76,21 @@
                [(csk/->kebab-case-keyword k) v]))
     coll))
 
+
 (defn result-one-snake->kebab [this result options]
   (->> (hugsql.adapter/result-one this result options)
        ->kebab-case-keyword-top-level))
+
 
 (defn result-raw-snake->kebab [this result options]
   (->> (hugsql.adapter/result-raw this result options)
        ->kebab-case-keyword-top-level))
 
+
 (defn result-many-snake->kebab [this result options]
   (->> (hugsql.adapter/result-many this result options)
        (map ->kebab-case-keyword-top-level)))
+
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym] '{{namespace}}.lib.db/result-one-snake->kebab)
 (defmethod hugsql.core/hugsql-result-fn :one [sym] '{{namespace}}.lib.db/result-one-snake->kebab)

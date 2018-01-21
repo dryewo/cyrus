@@ -8,7 +8,9 @@
             [{{namespace}}.events]{{/nakadi}})
   (:gen-class))
 
+
 ;; HINT: After adding or removing a defstate restart the REPL
+
 
 (defn implementation-version []
   (or
@@ -17,9 +19,11 @@
     ;; When running as `java -jar ...`
     (-> (eval '{{package}}.core) .getPackage .getImplementationVersion)))
 
+
 (cfg/def log-level)
 (cfg/def nrepl-enabled {:spec boolean?}){{#debug}}
 (cfg/def test-timeout {:spec int?}){{/debug}}
+
 
 (defn -main [& args]
   (log/disable-console-logging-colors)
@@ -47,12 +51,15 @@
       (log/error e "Could not start the application.")
       (System/exit 1))))
 
+
 (log/set-ns-log-levels!
   {"{{namespace}}.*" :debug
    "com.zaxxer.hikari.*" :warn
    :all :info})
 
+
 (log/set-output-fn! log/default-log-output-fn)
+
 
 (comment
   (log/set-level! :info)

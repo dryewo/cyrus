@@ -8,17 +8,21 @@
   (:import java.util.Date
            java.text.SimpleDateFormat))
 
+
 (defn prefix [name]
   (->> (str/split name #"(-|_)")
        (map first)
        (apply str)))
 
+
 (defn timestamp []
   (.format (SimpleDateFormat. "yyyyMMddHHmmss") (Date.)))
+
 
 (defn feature-flags [feature-set]
   (into {} (for [f feature-set]
              [(-> f (str/replace "+" "") keyword) true])))
+
 
 (defn prepare-data
   ([name]
@@ -37,6 +41,7 @@
         :now-ts      (timestamp)
         :debug       (System/getenv "DEBUG")}
        (feature-flags feature-set)))))
+
 
 (defn prepare-files
   "Generates arguments for ->files. Extracted for testing."
@@ -86,14 +91,17 @@
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
+
 (def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2"})
 (def hidden-features #{"+nakadi"})
 (def supported-features (into all-features hidden-features))
+
 
 (def feature-dependencies
   {"+swagger1st"        ["+http"]
    "+swagger1st-oauth2" ["+swagger1st"]
    "+all"               all-features})
+
 
 (defn add-dependent-features "recursively resolves features"
   [dependencies features]
@@ -104,6 +112,7 @@
     (if (= features+ features)
       features+
       (recur dependencies features+))))
+
 
 (defn cyrus [project-name & feature-params]
   (let [features     (set feature-params)

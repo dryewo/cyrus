@@ -4,7 +4,9 @@
             [dovetail.core :as log]
             [cyrus-config.core :as cfg]))
 
+
 (cfg/def tokeninfo-url "URL to check access tokens against. If not set, tokens won't be checked.")
+
 
 ;; Checks if TOKENINFO_URL is set and returns a pass-through handler in case it's not
 ;; Works as a security handler for io.sarnowski.swagger1st.core/protector
@@ -18,8 +20,10 @@
              (fn [request definition requirements]
                request))))
 
+
 (defn log-access-denied-reason [reason]
   (log/info "Access denied: %s" reason))
+
 
 (defn wrap-reason-logger [handler]
   (oauth2/wrap-log-auth-error handler log-access-denied-reason))

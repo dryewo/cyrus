@@ -5,11 +5,13 @@
             [{{namespace}}.http :refer :all]
             [{{namespace}}.test-utils :as tu]))
 
+
 (use-fixtures
   :each (fn [f]
           (tu/start-with-env-override {:http-port 8080} #'server)
           (f)
           (m/stop)))
+
 
 (deftest test-http
   (is (= 200 (:status (http/get "http://localhost:8080/hello"))))

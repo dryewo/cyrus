@@ -8,6 +8,7 @@
             [dovetail.core :as log]
             [{{namespace}}.lib.db :as dblib]))
 
+
 (cfg/def jdbc-url "Coordinates of the database. Should start with `jdbc:postgresql://`."
                   {:default  "jdbc:postgresql://localhost:5432/postgres"
                    :var-name "DB_JDBC_URL"})
@@ -25,6 +26,7 @@
    :init-in-transaction? true
    :migration-dir        "db/migrations"})
 
+
 (m/defstate ^:dynamic *db*
   :start (do
            (log/info "Starting DB connection pool.")
@@ -37,13 +39,16 @@
              db))
   :stop (conman/disconnect! @*db*))
 
+
 (defmacro with-transaction [& body]
   `(conman/with-transaction [*db*]
      ~@body))
 
+
 (defmacro with-transaction* [opts & body]
   `(conman/with-transaction [*db* ~opts]
      ~@body))
+
 
 (defmacro with-pg-advisory-xact-lock
   "Acquires transaction level lock in the DB. If the lock is taken, waits until it's available."
@@ -52,6 +57,7 @@
      (dblib/pg-advisory-xact-lock tx# ~lock-id)
      ~@body))
 
+
 (defmacro with-try-advisory-xact-lock
   "Acquires transaction level lock in the DB and returns true. If the lock is taken, returns false immediately."
   [lock-id & body]
@@ -59,7 +65,9 @@
      (when (dblib/pg-try-advisory-xact-lock tx# ~lock-id)
        ~@body)))
 
+
 (conman/bind-connection-deref *db* "db/queries.sql")
+
 
 (comment
   ;; CRUD operations

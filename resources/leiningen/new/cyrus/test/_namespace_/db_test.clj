@@ -5,12 +5,14 @@
             [{{namespace}}.db :refer :all]
             [{{namespace}}.test-utils :as tu]))
 
+
 (use-fixtures
   :each (fn [f]
           (tu/start-with-env-override {} #'*db*)
           (tu/wipe-db @*db*)
           (f)
           (m/stop)))
+
 
 (deftest test-memories
   (is (= nil (get-memory {:id "1"})))

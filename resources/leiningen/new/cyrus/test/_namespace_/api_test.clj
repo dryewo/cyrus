@@ -8,6 +8,7 @@
             [{{namespace}}.http]
             [{{namespace}}.test-utils :as tu]))
 
+
 (deftest api
   (tu/start-with-env-override {:http-port 8080} #'{{namespace}}.http/server)
   (is (= {:message "Hello Dude"} (:body (http/get "http://localhost:8080/api/hello/Dude" {:as :json}))))
@@ -16,14 +17,17 @@
   (m/stop))
 {{#swagger1st-oauth2}}
 
+
 (defn mock-tokeninfo-handler [request]
   (let [authorization (get-in request [:headers "authorization"])]
     (if (= "Bearer foo" authorization)
       {:status 200 :body {:access_token "foo" :uid "mjackson" :scope ["uid"]}}
       {:status 401})))
 
+
 (defn start-mock-tokeninfo-server []
   (aleph.http/start-server (wrap-json-response mock-tokeninfo-handler) {:port 7777}))
+
 
 (deftest api-protection
   (with-open [mock-tokeninfo-server (start-mock-tokeninfo-server)]

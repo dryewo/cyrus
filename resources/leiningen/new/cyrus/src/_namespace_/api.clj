@@ -6,9 +6,11 @@
             [{{namespace}}.lib.http :as httplib]{{#swagger1st-oauth2}}
             [{{namespace}}.authenticator :as authenticator]{{/swagger1st-oauth2}}))
 
+
 (defn get-hello [{:keys [who]} req]
   (log/info "Saying hello to %s" who)
   {:status 200 :body {:message (str "Hello " who)}})
+
 
 (defn resolve-operation
   "Calls operationId function with flattened request params and raw request map."
@@ -16,6 +18,7 @@
   (when-let [operation-fn (s1stexec/operationId-to-function request-definition)]
     (fn [request]
       (operation-fn (apply merge (vals (:parameters request))) request))))
+
 
 (m/defstate handler
   :start (-> (s1st/context :yaml-cp "api.yaml")

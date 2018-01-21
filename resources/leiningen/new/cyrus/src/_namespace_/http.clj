@@ -16,14 +16,17 @@
             [{{namespace}}.lib.http :as httplib]{{#swagger1st}}
             [{{namespace}}.api :as api]{{/swagger1st}}))
 
+
 (cfg/def port "Port for HTTP server to listen on."
               {:var-name "HTTP_PORT"
                :spec     int?
                :default  8090})
 
+
 (defn get-hello [req]
   (log/info "Hello")
   {:status 200 :body "Hello" :headers {"Content-type" "text/plain"}})
+
 
 (defn get-hello-async [req]
   ;; Can also return a future for asynchronous processing
@@ -31,8 +34,10 @@
     (log/info "Hello2")
     {:status 200 :body "Hello2" :headers {"Content-type" "text/plain"}}))
 
+
 (defn get-json [req]
   {:status 200 :body {:message "Hello"}})
+
 
 (defn remove-trailing-slash
   "Remove the trailing '/' from a URI string, if it exists, unless the URI is just '/'"
@@ -41,9 +46,11 @@
     uri
     (compojure.middleware/remove-trailing-slash uri)))
 
+
 (def api-defaults
   (-> ring.middleware.defaults/api-defaults
       (assoc-in [:security :hsts] true)))
+
 
 ;; Middleware rule of thumb: Request goes bottom to top, response goes top to bottom
 (defn make-handler []
@@ -75,6 +82,7 @@
       ;; It never hurts to gzip
       (wrap-gzip)
       (httplib/wrap-request-log-context)))
+
 
 (m/defstate server
   :start (do

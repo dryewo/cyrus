@@ -3,6 +3,7 @@
             [midje.sweet :refer :all]
             [leiningen.new.cyrus :refer :all]))
 
+
 (deftest test-prepare-data
   (facts ""
     (prepare-data "foo")
@@ -34,6 +35,7 @@
                   :nested-dirs "aaa_bbb"
                   :prefix      "ab"}))
   )
+
 
 (deftest test-resolve-dependencies
   (tabular
