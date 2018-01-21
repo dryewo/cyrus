@@ -62,6 +62,8 @@
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        ["test/{{nested-dirs}}/test_utils.clj" (render "test/_namespace_/test_utils.clj" data)]
        "resources"]
+      (when (:nakadi data)
+        [["src/{{nested-dirs}}/events.clj" (render "src/_namespace_/events.clj" data)]])
       (when (:nrepl data)
         [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
       (when (:swagger1st data)
@@ -84,12 +86,14 @@
          ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
-(def supported-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2"})
+(def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2"})
+(def hidden-features #{"+nakadi"})
+(def supported-features (into all-features hidden-features))
 
 (def feature-dependencies
   {"+swagger1st"        ["+http"]
    "+swagger1st-oauth2" ["+swagger1st"]
-   "+all"               supported-features})
+   "+all"               all-features})
 
 (defn add-dependent-features "recursively resolves features"
   [dependencies features]

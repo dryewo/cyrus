@@ -18,9 +18,10 @@
                  [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#swagger1st-oauth2}}
                  [fahrscheine-bitte "0.2.0"]{{/swagger1st-oauth2}}{{#db}}
                  [conman "0.7.5"]
-                 [org.postgresql/postgresql "42.1.4"]
+                 [org.postgresql/postgresql "42.2.0"]
                  [camel-snake-kebab "0.4.0"]
-                 [migratus "1.0.3"]{{/db}}]
+                 [migratus "1.0.3"]{{/db}}{{#nakadi}}
+                 [me.dryewo/clj-nakadi-java "0.0.2"]{{/nakadi}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"

@@ -4,7 +4,8 @@
             [cyrus-config.core :as cfg]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
-            [{{namespace}}.db]{{/db}})
+            [{{namespace}}.db]{{/db}}{{#nakadi}}
+            [{{namespace}}.events]{{/nakadi}})
   (:gen-class))
 
 ;; HINT: After adding or removing a defstate restart the REPL

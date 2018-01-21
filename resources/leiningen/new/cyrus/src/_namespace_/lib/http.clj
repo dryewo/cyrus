@@ -20,5 +20,5 @@
   [next-handler]
   (fn [request]
     (let [request-info (compute-request-info request)]
-      (log/with-context (str " [" request-info "]")
+      (log/with-context (str "[" request-info "]")
         (next-handler request)))))

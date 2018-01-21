@@ -14,7 +14,7 @@
              (log/info "Checking OAuth2 access tokens against %s." tokeninfo-url)
              (oauth2/make-oauth2-s1st-security-handler access-token-resolver-fn oauth2/check-corresponding-attributes))
            (do
-             (log/warn "No TOKENINFO_URL set; NOT ENFORCING SECURITY!")
+             (log/warn "%s is not set; NOT CHECKING ACCESS TOKENS!" (-> (meta #'tokeninfo-url) ::cfg/effective-definition :var-name))
              (fn [request definition requirements]
                request))))
 
