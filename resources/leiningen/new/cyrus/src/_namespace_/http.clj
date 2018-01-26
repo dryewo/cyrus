@@ -14,7 +14,8 @@
             [dovetail.core :as log]
             [cyrus-config.core :as cfg]
             [{{namespace}}.lib.http :as httplib]{{#swagger1st}}
-            [{{namespace}}.api :as api]{{/swagger1st}}))
+            [{{namespace}}.api :as api]{{/swagger1st}}{{#ui}}
+            [{{namespace}}.ui :as ui]{{/ui}}))
 
 
 (cfg/def port "Port for HTTP server to listen on."
@@ -55,11 +56,7 @@
 ;; Middleware rule of thumb: Request goes bottom to top, response goes top to bottom
 (defn make-handler []
   (-> (routes
-        ;; Normal routes, can view in the browser
-        (-> (routes
-              (GET "/hello" req (get-hello req))
-              (GET "/hello2" req (get-hello-async req)))
-            (wrap-canonical-redirect remove-trailing-slash))
+        (GET "/.health" _ {:status 200})
         ;; Simple JSON API implementation
         (-> (routes
               (GET "/json" req (get-json req)))
@@ -77,7 +74,13 @@
               (ANY "/api/ui" req (resp/redirect "/api/ui/" 301))
               (ANY "/api/*" req (@api/handler req)))
             (wrap-json-response)
-            (wrap-defaults api-defaults)){{/swagger1st}}
+            (wrap-defaults api-defaults)){{/swagger1st}}{{#ui}}
+        ;; UI routes, can view in the browser
+        (-> (routes
+              (GET "/" _ (resp/redirect "/ui" :moved-permanently))
+              (ANY "/ui" req (@ui/handler req))
+              (ANY "/ui/*" req (@ui/handler req)))
+            (wrap-canonical-redirect remove-trailing-slash)){{/ui}}
         (route/not-found nil))
       ;; It never hurts to gzip
       (wrap-gzip)

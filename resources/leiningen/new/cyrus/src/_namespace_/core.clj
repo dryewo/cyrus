@@ -1,23 +1,17 @@
 (ns {{namespace}}.core
   (:require [mount.lite :as m]
             [dovetail.core :as log]
-            [cyrus-config.core :as cfg]{{#nrepl}}
+            [cyrus-config.core :as cfg]
+            [{{namespace}}.utils :as u]{{#nrepl}}
             [{{namespace}}.nrepl :as nrepl]{{/nrepl}}{{#http}}
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}}{{#nakadi}}
-            [{{namespace}}.events]{{/nakadi}})
+            [{{namespace}}.events]{{/nakadi}}{{#ui}}
+            [{{namespace}}.ui]{{/ui}})
   (:gen-class))
 
 
 ;; HINT: After adding or removing a defstate restart the REPL
-
-
-(defn implementation-version []
-  (or
-    ;; When running in a REPL
-    (System/getProperty "{{name}}.version")
-    ;; When running as `java -jar ...`
-    (-> (eval '{{package}}.core) .getPackage .getImplementationVersion)))
 
 
 (cfg/def log-level)
@@ -29,7 +23,7 @@
   (log/disable-console-logging-colors)
   (log/set-level! :info)
   (log/set-log-level-from-env! log-level)
-  (log/info "Starting {{name}} version %s" (implementation-version))
+  (log/info "Starting {{name}} version %s" (u/implementation-version))
   (log/info "States found: %s" @m/*states*)
   (try
     (cfg/validate!)

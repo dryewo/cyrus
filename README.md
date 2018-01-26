@@ -7,18 +7,14 @@ Includes:
 
 * [mount-lite] for state management
 * dev/user.clj for REPL-driven development
-* [timbre]+[dovetail] for logging
+* [timbre] + [dovetail] for logging
 * +http: [aleph] + [Compojure] (and [Ring])
 * +db: PostgreSQL, [conman], [migratus], [HugSQL]
+* +ui: Simple web UI, rendering HTML using [hiccup]
 * +[nrepl]: NREPL server for remote debugging
 * +[swagger1st] (RESTful API), includes +http
 * [Twelve-Factor App] configuration management with [cyrus-config]
 * useful tweaks
-
-Roadmap:
-
-* [Hystrix]
-* Dockerfile
 
 ## Usage
 
@@ -92,6 +88,11 @@ PostgreSQL 9.6 for development and testing can be launched in a Docker container
 ```sh
 ./make.sh db
 ```
+
+### Web UI
+
+`+ui` option enables a very simplistic admin UI, served under `/ui`. HTML is rendered using [hiccup]. Static resources
+are served from `resources/ui` resource path, `style.css` is provided as an example.
 
 ### NREPL
 
@@ -227,3 +228,4 @@ limitations under the License.
 [environ]: https://github.com/weavejester/environ
 [Luminus]: https://github.com/luminus-framework/luminus-template
 [fahrscheine-bitte]: https://github.com/dryewo/fahrscheine-bitte
+[hiccup]: https://github.com/weavejester/hiccup

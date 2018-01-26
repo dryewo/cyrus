@@ -14,8 +14,10 @@
 
 
 (deftest test-http
-  (is (= 200 (:status (http/get "http://localhost:8080/hello"))))
-  (is (= 200 (:status (http/get "http://localhost:8080/hello2"))))
-  (is (= [200 {:message "Hello"} "application/json; charset=utf-8"]
-         ((juxt :status :body #(get-in % [:headers "Content-Type"]))
-           (http/get "http://localhost:8080/json" {:as :json})))))
+  (testing "Health endpoint returns 200"
+    (is (= 200 (:status (http/get "http://localhost:8080/.health")))))
+
+  (testing "JSON API endpoint returns correct content type"
+    (is (= [200 {:message "Hello"} "application/json; charset=utf-8"]
+           ((juxt :status :body #(get-in % [:headers "Content-Type"]))
+             (http/get "http://localhost:8080/json" {:as :json}))))))

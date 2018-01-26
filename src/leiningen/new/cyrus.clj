@@ -64,9 +64,14 @@
        ["dev-env.edn" (render "dev-env.edn" data)]
        ["dev/user.clj" (render "dev/user.clj" data)]
        ["src/{{nested-dirs}}/core.clj" (render "src/_namespace_/core.clj" data)]
+       ["src/{{nested-dirs}}/utils.clj" (render "src/_namespace_/utils.clj" data)]
        ["test/{{nested-dirs}}/core_test.clj" (render "test/_namespace_/core_test.clj" data)]
        ["test/{{nested-dirs}}/test_utils.clj" (render "test/_namespace_/test_utils.clj" data)]
        "resources"]
+      (when (:ui data)
+        [["src/{{nested-dirs}}/ui.clj" (render "src/_namespace_/ui.clj" data)]
+         ["test/{{nested-dirs}}/ui_test.clj" (render "test/_namespace_/ui_test.clj" data)]
+         ["resources/ui/style.css" (render "resources/ui/style.css" data)]])
       (when (:nakadi data)
         [["src/{{nested-dirs}}/events.clj" (render "src/_namespace_/events.clj" data)]])
       (when (:nrepl data)
@@ -92,7 +97,7 @@
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
 
-(def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2"})
+(def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui"})
 (def hidden-features #{"+nakadi"})
 (def supported-features (into all-features hidden-features))
 
@@ -100,6 +105,7 @@
 (def feature-dependencies
   {"+swagger1st"        ["+http"]
    "+swagger1st-oauth2" ["+swagger1st"]
+   "+ui"                ["+http"]
    "+all"               all-features})
 
 
