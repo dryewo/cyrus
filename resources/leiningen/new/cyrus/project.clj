@@ -20,9 +20,10 @@
                  [conman "0.7.5"]
                  [org.postgresql/postgresql "42.2.1"]
                  [camel-snake-kebab "0.4.0"]
-                 [migratus "1.0.3"]{{/db}}{{#nakadi}}
+                 [migratus "1.0.6"]{{/db}}{{#nakadi}}
                  [me.dryewo/clj-nakadi-java "0.0.2"]{{/nakadi}}{{#ui}}
-                 [hiccup "1.0.5"]{{/ui}}]
+                 [hiccup "1.0.5"]{{/ui}}{{#ui-oauth2}}
+                 [cyrus/ui-oauth2 "0.1.3"]{{/ui-oauth2}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"

@@ -97,7 +97,7 @@
          ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
 
 
-(def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui"})
+(def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui" "+ui-oauth2"})
 (def hidden-features #{"+nakadi"})
 (def supported-features (into all-features hidden-features))
 
@@ -106,6 +106,7 @@
   {"+swagger1st"        ["+http"]
    "+swagger1st-oauth2" ["+swagger1st"]
    "+ui"                ["+http"]
+   "+ui-oauth2"         ["+ui"]
    "+all"               all-features})
 
 

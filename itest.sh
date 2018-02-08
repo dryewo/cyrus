@@ -16,21 +16,20 @@ run-test() {
     DEBUG=1 lein new cyrus "$@"
     local project_dir=${1##*/}
     pushd "$project_dir"
+        lein ancient
         lein test
         lein uberjar
-        lein ancient
         TEST_TIMEOUT=1000 NREPL_ENABLED=true java -jar -jar "target/uberjar/$project_dir.jar"
     popd
 }
 
 run-test org.example/foo-bar1 +all +nakadi
-run-test org.example/foo-bar2 +all
-run-test org.example/foo-bar3
+run-test org.example/foo-bar2
+run-test org.example/foo-bar3 +all
 run-test org.example/foo-bar4 +http
 run-test org.example/foo-bar5 +db
 run-test org.example/foo-bar6 +swagger1st
-run-test org.example/foo-bar7 +swagger1st-oauth2
-run-test org.example/foo-bar8 +ui
+run-test org.example/foo-bar7 +ui
 
 # Just in case we want to try it outside of target/
 lein install

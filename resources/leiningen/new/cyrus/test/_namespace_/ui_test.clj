@@ -2,7 +2,8 @@
   (:require [clojure.test :refer :all]
             [{{namespace}}.test-utils :as tu]
             [mount.lite :as m]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [{{namespace}}.http]))
 
 
 (use-fixtures

@@ -13,5 +13,6 @@
 
 (defn wipe-db [db]
   (println "Wiping the DB")
-  (jdbc/delete! db :memories ["true"]))
+  (jdbc/delete! db :memories ["true"])
+  nil)
 {{/db}}

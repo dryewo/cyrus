@@ -94,6 +94,10 @@ PostgreSQL 9.6 for development and testing can be launched in a Docker container
 `+ui` option enables a very simplistic admin UI, served under `/ui`. HTML is rendered using [hiccup]. Static resources
 are served from `resources/ui` resource path, `style.css` is provided as an example.
 
+A variant of this option `+ui-oauth2` includes OAuth2 login with example configuration for GitHub.
+Authentication which can be configured to be optional or mandatory.
+See [cyrus-ui-oauth2] for more information.
+
 ### NREPL
 
 `+nrepl` adds a NREPL server that is started before the main application is. It has to be enabled
@@ -229,3 +233,4 @@ limitations under the License.
 [Luminus]: https://github.com/luminus-framework/luminus-template
 [fahrscheine-bitte]: https://github.com/dryewo/fahrscheine-bitte
 [hiccup]: https://github.com/weavejester/hiccup
+[cyrus-ui-oauth2]: https://github.com/dryewo/cyrus-ui-oauth2
