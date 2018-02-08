@@ -23,13 +23,15 @@ run-test() {
     popd
 }
 
-run-test org.example/foo-bar1 +all +nakadi
+run-test org.example/foo-bar1 +all +nakadi +credentials
 run-test org.example/foo-bar2
 run-test org.example/foo-bar3 +all
-run-test org.example/foo-bar4 +http
-run-test org.example/foo-bar5 +db
-run-test org.example/foo-bar6 +swagger1st
-run-test org.example/foo-bar7 +ui
+run-test org.example/foo-bar4 +nakadi
+run-test org.example/foo-bar5 +credentials
+run-test org.example/foo-bar6 +http
+run-test org.example/foo-bar7 +db
+run-test org.example/foo-bar8 +swagger1st
+run-test org.example/foo-bar9 +ui
 
 # Just in case we want to try it outside of target/
 lein install

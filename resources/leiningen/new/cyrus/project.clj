@@ -23,7 +23,8 @@
                  [migratus "1.0.6"]{{/db}}{{#nakadi}}
                  [me.dryewo/clj-nakadi-java "0.0.2"]{{/nakadi}}{{#ui}}
                  [hiccup "1.0.5"]{{/ui}}{{#ui-oauth2}}
-                 [cyrus/ui-oauth2 "0.1.3"]{{/ui-oauth2}}]
+                 [cyrus/ui-oauth2 "0.1.3"]{{/ui-oauth2}}{{#credentials}}
+                 [me.dryewo/mem-files "0.1.0"]{{/credentials}}]
   :main ^:skip-aot {{namespace}}.core
   :target-path "target/%s"
   :uberjar-name "{{name}}.jar"

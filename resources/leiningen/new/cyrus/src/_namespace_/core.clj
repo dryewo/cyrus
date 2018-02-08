@@ -7,15 +7,16 @@
             [{{namespace}}.http]{{/http}}{{#db}}
             [{{namespace}}.db]{{/db}}{{#nakadi}}
             [{{namespace}}.events]{{/nakadi}}{{#ui}}
-            [{{namespace}}.ui]{{/ui}})
+            [{{namespace}}.ui]{{/ui}}{{#credentials}}
+            [{{namespace}}.credentials]{{/credentials}})
   (:gen-class))
 
 
 ;; HINT: After adding or removing a defstate restart the REPL
 
 
-(cfg/def log-level)
-(cfg/def nrepl-enabled {:spec boolean?}){{#debug}}
+(cfg/def log-level){{#nrepl}}
+(cfg/def nrepl-enabled {:spec boolean?}){{/nrepl}}{{#debug}}
 (cfg/def test-timeout {:spec int?}){{/debug}}
 
 

@@ -4,15 +4,18 @@
             [dovetail.core :as log]
             [clojure.string :as str]
             [clojure.java.shell :as shell]
-            [clj-nakadi-java.core :as nakadi]))
+            [clj-nakadi-java.core :as nakadi]{{#credentials}}
+            [{{namespace}}.credentials :as creds]{{/credentials}}))
 
 
 (cfg/def nakadi-url)
 (cfg/def subscription-id {:required (some? nakadi-url)})
+{{^credentials}}
 
 
 (m/defstate access-token
   :start "" #_(-> (shell/sh "ztoken") :out str/trim))
+{{/credentials}}
 
 
 (m/defstate client
@@ -20,7 +23,7 @@
            (log/warn "%s is not set, will not publish events or subscribe to Nakadi." (-> (meta #'nakadi-url) ::cfg/effective-definition :var-name))
            (do
              (log/info "Initializing Nakadi client with URL %s" nakadi-url)
-             (nakadi/make-client nakadi-url (fn [] @access-token)))))
+             (nakadi/make-client nakadi-url {{^credentials}}(fn [] @access-token){{/credentials}}{{#credentials}}(fn [] (creds/get :nakadi-token-secret)){{/credentials}}))))
 
 
 (defn callback [event]
@@ -35,6 +38,7 @@
            )
   :stop (when @consumer
           (@consumer)))
+
 
 (comment
   (nakadi/publish-events @client "foobar.event" [{:foo "bar"}]))

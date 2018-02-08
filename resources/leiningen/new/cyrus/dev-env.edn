@@ -1,1 +1,2 @@
-{:http-port 8090}
+{:http-port 8090{{#credentials}}
+ :credentials-dir "credentials"{{/credentials}}}

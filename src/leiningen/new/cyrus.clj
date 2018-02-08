@@ -74,6 +74,10 @@
          ["resources/ui/style.css" (render "resources/ui/style.css" data)]])
       (when (:nakadi data)
         [["src/{{nested-dirs}}/events.clj" (render "src/_namespace_/events.clj" data)]])
+      (when (:credentials data)
+        [["src/{{nested-dirs}}/credentials.clj" (render "src/_namespace_/credentials.clj" data)]
+         ["test/{{nested-dirs}}/credentials_test.clj" (render "test/_namespace_/credentials_test.clj" data)]
+         ["credentials/nakadi-token-secret" "foo-token-replace-me-with-real-one"]])
       (when (:nrepl data)
         [["src/{{nested-dirs}}/nrepl.clj" (render "src/_namespace_/nrepl.clj" data)]])
       (when (:swagger1st data)
@@ -98,7 +102,7 @@
 
 
 (def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui" "+ui-oauth2"})
-(def hidden-features #{"+nakadi"})
+(def hidden-features #{"+nakadi" "+credentials"})
 (def supported-features (into all-features hidden-features))
 
 

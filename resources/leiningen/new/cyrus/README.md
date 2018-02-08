@@ -13,9 +13,13 @@ user=> (reset)
 
 ## Testing
 
-```
-$ lein test
-```
+With coverage report:
+
+    $ lein cloverage
+
+Same, but without coverage report:
+
+    $ lein test
 
 ## Building
 
@@ -31,7 +35,7 @@ $ lein run
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2018 FIXME
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
