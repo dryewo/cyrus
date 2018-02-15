@@ -9,15 +9,12 @@
             [{{namespace}}.lib.db :as dblib]))
 
 
-(cfg/def jdbc-url "Coordinates of the database. Should start with `jdbc:postgresql://`."
-                  {:default  "jdbc:postgresql://localhost:5432/postgres"
-                   :var-name "DB_JDBC_URL"})
-(cfg/def username "Database username."
-                  {:default  "postgres"
-                   :var-name "DB_USERNAME"})
-(cfg/def password "Database password."
-                  {:var-name "DB_PASSWORD"
-                   :secret   true})
+(cfg/def DB_JDBC_URL "Coordinates of the database. Should start with `jdbc:postgresql://`."
+                     {:default "jdbc:postgresql://localhost:5432/postgres"})
+(cfg/def DB_USERNAME "Database username."
+                     {:default "postgres"})
+(cfg/def DB_PASSWORD "Database password."
+                     {:secret true})
 
 
 (def migratus-config
@@ -30,9 +27,9 @@
 (m/defstate ^:dynamic *db*
   :start (do
            (log/info "Starting DB connection pool.")
-           (let [db (conman/connect! {:jdbc-url            jdbc-url
-                                      :username            username
-                                      :password            password
+           (let [db (conman/connect! {:jdbc-url            DB_JDBC_URL
+                                      :username            DB_USERNAME
+                                      :password            DB_PASSWORD
                                       :connection-init-sql "SET search_path TO c_data;"})]
              (migratus/init (merge migratus-config {:db db}))
              (migratus/migrate (merge migratus-config {:db db}))

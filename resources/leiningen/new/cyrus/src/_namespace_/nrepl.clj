@@ -4,13 +4,11 @@
             [cyrus-config.core :as cfg]))
 
 
-(cfg/def port "Port for NREPL server to listen on."
-              {:spec     int?
-               :default  55000
-               :var-name "NREPL_PORT"})
-(cfg/def bind "Network interface for NREPL server to bind to."
-              {:default  "0.0.0.0"
-               :var-name "NREPL_BIND"})
+(cfg/def NREPL_PORT "Port for NREPL server to listen on."
+                    {:spec     int?
+                     :default  55000})
+(cfg/def NREPL_BIND "Network interface for NREPL server to bind to."
+                    {:default  "0.0.0.0"})
 
 
 (defn flatten1
@@ -27,7 +25,7 @@
 
 (defn start-nrepl []
   (log/info "Starting NREPL server")
-  (let [started-server (apply n/start-server (flatten1 {:port port :bind bind}))]
+  (let [started-server (apply n/start-server (flatten1 {:port NREPL_PORT :bind NREPL_BIND}))]
     (log/info "NREPL server is listening on %s" (str (:server-socket started-server)))
     (alter-var-root #'nrepl-server (constantly started-server))))
 

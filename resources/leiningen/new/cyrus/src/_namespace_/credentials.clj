@@ -6,14 +6,14 @@
             [mem-files.core :as mem-files]))
 
 
-(cfg/def credentials-dir {:default "/meta/credentials"})
+(cfg/def CREDENTIALS_DIR {:default "/meta/credentials"})
 
 
 (m/defstate refresher
             :start (let [interval-ms 1000
-                         keys-files  {:nakadi-token-secret    (str credentials-dir "/" "nakadi-token-secret")
-                                      :employee-client-id     (str credentials-dir "/" "employee-client-id")
-                                      :employee-client-secret (str credentials-dir "/" "employee-client-secret")}]
+                         keys-files  {:nakadi-token-secret    (str CREDENTIALS_DIR "/" "nakadi-token-secret")
+                                      :employee-client-id     (str CREDENTIALS_DIR "/" "employee-client-id")
+                                      :employee-client-secret (str CREDENTIALS_DIR "/" "employee-client-secret")}]
                      (log/info "Starting Credential Refresher with interval %s ms." interval-ms)
                      (mem-files/start interval-ms keys-files))
             :stop (.close @refresher))

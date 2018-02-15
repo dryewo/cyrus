@@ -18,10 +18,9 @@
             [{{namespace}}.ui :as ui]{{/ui}}))
 
 
-(cfg/def port "Port for HTTP server to listen on."
-              {:var-name "HTTP_PORT"
-               :spec     int?
-               :default  8090})
+(cfg/def HTTP_PORT "Port for HTTP server to listen on."
+                   {:spec    int?
+                    :default 8090})
 
 
 (defn get-hello [req]
@@ -90,7 +89,7 @@
 (m/defstate server
   :start (do
            (log/info "Starting HTTP server")
-           (let [started-server (aleph.http/start-server (make-handler) {:port port})]
+           (let [started-server (aleph.http/start-server (make-handler) {:port HTTP_PORT})]
              (log/info "HTTP server is listening on port %s" (aleph.netty/port started-server))
              started-server))
   :stop (.close @server))

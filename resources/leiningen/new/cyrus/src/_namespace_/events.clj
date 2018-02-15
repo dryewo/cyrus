@@ -8,8 +8,8 @@
             [{{namespace}}.credentials :as creds]{{/credentials}}))
 
 
-(cfg/def nakadi-url)
-(cfg/def subscription-id {:required (some? nakadi-url)})
+(cfg/def NAKADI_URL)
+(cfg/def SUBSCRIPTION_ID {:required (some? NAKADI_URL)})
 {{^credentials}}
 
 
@@ -19,11 +19,11 @@
 
 
 (m/defstate client
-  :start (if-not nakadi-url
-           (log/warn "%s is not set, will not publish events or subscribe to Nakadi." (-> (meta #'nakadi-url) ::cfg/effective-definition :var-name))
+  :start (if-not NAKADI_URL
+           (log/warn "NAKADI_URL is not set, will not publish events or subscribe to Nakadi.")
            (do
-             (log/info "Initializing Nakadi client with URL %s" nakadi-url)
-             (nakadi/make-client nakadi-url {{^credentials}}(fn [] @access-token){{/credentials}}{{#credentials}}(fn [] (creds/get :nakadi-token-secret)){{/credentials}}))))
+             (log/info "Initializing Nakadi client with URL %s" NAKADI_URL)
+             (nakadi/make-client NAKADI_URL {{^credentials}}(fn [] @access-token){{/credentials}}{{#credentials}}(fn [] (creds/get :nakadi-token-secret)){{/credentials}}))))
 
 
 (defn callback [event]
@@ -32,8 +32,8 @@
 
 (m/defstate consumer
   :start (when @client
-           (log/info "Starting Nakadi consumer for subscription %s." subscription-id)
-           (nakadi/consume-subscription @client subscription-id callback)
+           (log/info "Starting Nakadi consumer for subscription %s." SUBSCRIPTION_ID)
+           (nakadi/consume-subscription @client SUBSCRIPTION_ID callback)
            ;(nakadi/consume-raw-events @client "foobar.event" callback)
            )
   :stop (when @consumer

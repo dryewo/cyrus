@@ -5,18 +5,18 @@
             [cyrus-config.core :as cfg]))
 
 
-(cfg/def tokeninfo-url "URL to check access tokens against. If not set, tokens won't be checked.")
+(cfg/def TOKENINFO_URL "URL to check access tokens against. If not set, tokens won't be checked.")
 
 
 ;; Checks if TOKENINFO_URL is set and returns a pass-through handler in case it's not
 ;; Works as a security handler for io.sarnowski.swagger1st.core/protector
 (m/defstate oauth2-s1st-security-handler
-  :start (if tokeninfo-url
-           (let [access-token-resolver-fn (oauth2/make-cached-access-token-resolver tokeninfo-url {})]
-             (log/info "Checking OAuth2 access tokens against %s." tokeninfo-url)
+  :start (if TOKENINFO_URL
+           (let [access-token-resolver-fn (oauth2/make-cached-access-token-resolver TOKENINFO_URL {})]
+             (log/info "Checking OAuth2 access tokens against %s." TOKENINFO_URL)
              (oauth2/make-oauth2-s1st-security-handler access-token-resolver-fn oauth2/check-corresponding-attributes))
            (do
-             (log/warn "%s is not set; NOT CHECKING ACCESS TOKENS!" (-> (meta #'tokeninfo-url) ::cfg/effective-definition :var-name))
+             (log/warn "TOKENINFO_URL is not set; NOT CHECKING ACCESS TOKENS!")
              (fn [request definition requirements]
                request))))
 
