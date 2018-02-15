@@ -3,3 +3,5 @@ body {
     background: #ffb;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
+a { color: #44f; }
+a:visited { color: #f7f; }

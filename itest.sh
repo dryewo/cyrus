@@ -19,7 +19,7 @@ run-test() {
         lein ancient
         lein test
         lein uberjar
-        TEST_TIMEOUT=1000 NREPL_ENABLED=true java -jar -jar "target/uberjar/$project_dir.jar"
+        TEST_TIMEOUT=1000 NREPL_ENABLED=true java -jar "target/uberjar/$project_dir.jar"
     popd
 }
 

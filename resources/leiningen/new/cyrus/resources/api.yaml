@@ -16,7 +16,7 @@ security:
 {{/swagger1st-oauth2}}
 
 paths:
-  '/hello/{who}':
+  /hello/{who}:
     get:
       operationId: {{namespace}}.api/get-hello
       parameters:

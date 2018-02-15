@@ -11,15 +11,18 @@
             [{{namespace}}.utils :as u]))
 
 
-(defn page [title & body-contents]
+(defn page [title & main-contents]
   (-> (h/html [:html
                [:head
                 [:title title]
                 [:link {:rel "stylesheet" :href "/ui/style.css"}]]
-               (into [:body] body-contents)
-               [:footer
-                [:p [:br]]
-                [:p {:align "right"} [:small "Version: " (u/implementation-version)]]]])
+               [:body
+                [:header [:h1 "CDP Log Service"]]
+                ;[:nav (render-menu)]
+                (into [:main] main-contents)
+                [:footer
+                 [:p [:br]]
+                 [:p {:align "right"} [:small "Version: " (u/implementation-version)]]]]])
       (r/response)
       (r/content-type "text/html")))
 
@@ -33,9 +36,9 @@
 
 
 (def ui-routes
-  (routes
-    (GET "/ui" req (get-root req))
-    (route/resources "/ui" {:root "ui"})
+  (context "/ui" []
+    (GET "/" req (get-root req))
+    (route/resources "/" {:root "ui"})
     (route/not-found (page "Not found" [:h1 "Not found"]))))
 {{#ui-oauth2}}
 

@@ -102,7 +102,7 @@
 
 
 (def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui" "+ui-oauth2"})
-(def hidden-features #{"+nakadi" "+credentials"})
+(def hidden-features #{"+nakadi" "+credentials" "+everything"})
 (def supported-features (into all-features hidden-features))
 
 
@@ -111,7 +111,8 @@
    "+swagger1st-oauth2" ["+swagger1st"]
    "+ui"                ["+http"]
    "+ui-oauth2"         ["+ui"]
-   "+all"               all-features})
+   "+all"               all-features
+   "+everything"        supported-features})
 
 
 (defn add-dependent-features "recursively resolves features"
