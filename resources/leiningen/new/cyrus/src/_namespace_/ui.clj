@@ -4,10 +4,10 @@
             [compojure.route :as route]
             [dovetail.core :as log]
             [hiccup.core :as h]
-            [ring.util.response :as r]{{#ui-oauth2}}
+            [ring.util.response :as r]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.middleware.session.cookie :as cookie]
-            [cyrus-ui-oauth2.core :refer [wrap-ui-oauth2]]{{/ui-oauth2}}
+            [ring.middleware.session.cookie :as cookie]{{#ui-oauth2}}
+            [{{namespace}}.authenticator :as authenticator]{{/ui-oauth2}}
             [{{namespace}}.utils :as u]))
 
 
@@ -17,7 +17,7 @@
                 [:title title]
                 [:link {:rel "stylesheet" :href "/ui/style.css"}]]
                [:body
-                [:header [:h1 "CDP Log Service"]]
+                [:header [:h1 "{{name}}"]]
                 ;[:nav (render-menu)]
                 (into [:main] main-contents)
                 [:footer
@@ -29,7 +29,7 @@
 
 (defn get-root [req]
   (page "Hello"
-        [:h1 "Hello, World!"]{{#ui-oauth2}}
+        [:h2 "Hello, World!"]{{#ui-oauth2}}
         [:p [:a {:href "/ui/login"} "login"]]
         [:p [:a {:href "/ui/logout"} "logout"]]
         [:pre (with-out-str (clojure.pprint/pprint req))]{{/ui-oauth2}}))
@@ -39,28 +39,12 @@
   (context "/ui" []
     (GET "/" req (get-root req))
     (route/resources "/" {:root "ui"})
-    (route/not-found (page "Not found" [:h1 "Not found"]))))
-{{#ui-oauth2}}
-
-
-;; Go to https://github.com/settings/developers and register a new app (use http://localhost:8080/ui/callback),
-;; copy its client credentials here.
-(def github {:authorize-url            "https://github.com/login/oauth/authorize"
-             :access-token-url         "https://github.com/login/oauth/access_token"
-             :client-id                "CLIENT_ID"
-             :client-secret            "CLIENT_SECRET"
-             :scopes                   ["user:email"]
-             :allow-anon?              true
-             :default-landing-endpoint "/ui"
-             :redirect-endpoint        "/ui/callback"
-             :login-endpoint           "/ui/login"
-             :logout-endpoint          "/ui/logout"})
-{{/ui-oauth2}}
+    (route/not-found (page "Not found" [:h2 "Not found"]))))
 
 
 (m/defstate handler
-  :start {{^ui-oauth2}}ui-routes{{/ui-oauth2}}{{#ui-oauth2}}(-> ui-routes
-             (wrap-ui-oauth2 github)
+  :start (-> ui-routes{{#ui-oauth2}}
+             (authenticator/wrap-ui-oauth2){{/ui-oauth2}}
              (wrap-defaults (-> site-defaults
                                 (assoc-in [:session :cookie-attrs :same-site] :lax)
-                                (assoc-in [:session :store] (cookie/cookie-store {:key "0123456789abcdef"}))))){{/ui-oauth2}})
+                                (assoc-in [:session :store] (cookie/cookie-store {:key "{{{session-store-key}}}"}))))))

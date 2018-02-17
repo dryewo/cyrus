@@ -12,6 +12,10 @@ cd target
 
 export CYRUS_TEST=1
 
+export UI_ALLOW_ANON=true
+export TEST_TIMEOUT=1000
+export NREPL_ENABLED=true
+
 run-test() {
     DEBUG=1 lein new cyrus "$@"
     local project_dir=${1##*/}
@@ -19,20 +23,22 @@ run-test() {
         lein ancient
         lein test
         lein uberjar
-        TEST_TIMEOUT=1000 NREPL_ENABLED=true java -jar "target/uberjar/$project_dir.jar"
+        java -jar "target/uberjar/$project_dir.jar"
     popd
 }
 
-run-test org.example/foo-bar1 +all +nakadi +credentials
-run-test org.example/foo-bar2
-run-test org.example/foo-bar3 +all
-run-test org.example/foo-bar4 +nakadi
-run-test org.example/foo-bar5 +credentials
-run-test org.example/foo-bar6 +http
-run-test org.example/foo-bar7 +db
-run-test org.example/foo-bar8 +swagger1st
-run-test org.example/foo-bar9 +ui
+run-test org.example/foo-bar1 +everything
+run-test org.example/foo-bar2 +ui-oauth2
+run-test org.example/foo-bar3 +swagger1st-oauth2
+run-test org.example/foo-bar4
+run-test org.example/foo-bar5 +all
+run-test org.example/foo-bar6 +nakadi
+run-test org.example/foo-bar7 +credentials
+run-test org.example/foo-bar8 +http
+run-test org.example/foo-bar9 +db
+run-test org.example/foo-bar10 +swagger1st
+run-test org.example/foo-bar11 +ui
 
 # Just in case we want to try it outside of target/
 lein install
-echo "Use:   CYRUS_TEST=1 lein new cyrus org.example.footeam/bar-project --snapshot -- +all"
+echo "Use:   CYRUS_TEST=1 lein new cyrus org.example.footeam/bar-project +everything"

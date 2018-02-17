@@ -24,6 +24,14 @@
              [(-> f (str/replace "+" "") keyword) true])))
 
 
+(defn rand-str [len]
+  (apply str (take len (repeatedly #(char (+ 48 (rand-int 43)))))))
+
+
+(defn random-session-store-key []
+  (rand-str 16))
+
+
 (defn prepare-data
   ([name]
    (prepare-data name #{}))
@@ -39,7 +47,8 @@
         :year        (year)
         :date        (date)
         :now-ts      (timestamp)
-        :debug       (System/getenv "DEBUG")}
+        :debug       (System/getenv "DEBUG")
+        :session-store-key (random-session-store-key)}
        (feature-flags feature-set)))))
 
 
@@ -84,7 +93,7 @@
         [["resources/api.yaml" (render "resources/api.yaml" data)]
          ["src/{{nested-dirs}}/api.clj" (render "src/_namespace_/api.clj" data)]
          ["test/{{nested-dirs}}/api_test.clj" (render "test/_namespace_/api_test.clj" data)]])
-      (when (:swagger1st-oauth2 data)
+      (when (or (:swagger1st-oauth2 data) (:ui-oauth2 data))
         [["src/{{nested-dirs}}/authenticator.clj" (render "src/_namespace_/authenticator.clj" data)]])
       (when (:http data)
         [["src/{{nested-dirs}}/http.clj" (render "src/_namespace_/http.clj" data)]
@@ -132,6 +141,7 @@
         all-features (add-dependent-features feature-dependencies features)]
     (cond
       unsupported
-      (main/info "Unrecognized options:" unsupported "\nSupported options are:" supported-features)
+      (do (main/info "Unrecognized options:" unsupported "\nSupported options are:" supported-features)
+          (main/abort))
       :else
       (apply ->files (prepare-files project-name all-features)))))
