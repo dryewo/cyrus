@@ -17,7 +17,7 @@
                  [clj-http "3.7.0"]{{/http}}{{#swagger1st}}
                  [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#swagger1st-oauth2}}
                  [fahrscheine-bitte "0.2.0"]{{/swagger1st-oauth2}}{{#db}}
-                 [conman "0.7.5"]
+                 [conman "0.7.6"]
                  [org.postgresql/postgresql "42.2.1"]
                  [camel-snake-kebab "0.4.0"]
                  [migratus "1.0.6"]{{/db}}{{#nakadi}}
