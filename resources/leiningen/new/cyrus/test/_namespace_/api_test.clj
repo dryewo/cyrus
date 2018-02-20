@@ -10,7 +10,7 @@
 
 
 (deftest api
-  (tu/start-with-env-override {:http-port 8080} #'{{namespace}}.http/server)
+  (tu/start-with-env-override '{HTTP_PORT 8080} #'{{namespace}}.http/server)
   (is (= {:message "Hello Dude"} (:body (http/get "http://localhost:8080/api/hello/Dude" {:as :json}))))
   (is (= 200 (:status (http/get "http://localhost:8080/api/ui"))))
   (is (= 200 (:status (http/get "http://localhost:8080/api/swagger.json" {:as :json}))))
@@ -31,7 +31,7 @@
 
 (deftest api-protection
   (with-open [mock-tokeninfo-server (start-mock-tokeninfo-server)]
-    (tu/start-with-env-override {:http-port 8080 :tokeninfo-url "http://localhost:7777/"}
+    (tu/start-with-env-override '{HTTP_PORT 8080 TOKENINFO_URL "http://localhost:7777/"}
                                 #'{{namespace}}.http/server)
     (testing "When a correct token is given, everything works"
       (is (= {:message "Hello Dude"} (:body (http/get "http://localhost:8080/api/hello/Dude"

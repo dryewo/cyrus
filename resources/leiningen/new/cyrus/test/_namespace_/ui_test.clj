@@ -8,7 +8,7 @@
 
 (use-fixtures
   :each (fn [f]
-          (tu/start-with-env-override {:http-port 8080} #'{{namespace}}.http/server)
+          (tu/start-with-env-override '{HTTP_PORT 8080} #'{{namespace}}.http/server)
           (f)
           (m/stop)))
 
