@@ -1,7 +1,6 @@
 (ns {{namespace}}.db
   (:require [conman.core :as conman]
             [mount.lite :as m]
-            [schema.core :as s]
             [migratus.core :as migratus]
             [clojure.java.jdbc :as jdbc]
             [cyrus-config.core :as cfg]
