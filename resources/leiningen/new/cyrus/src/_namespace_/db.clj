@@ -29,7 +29,7 @@
            (let [db (conman/connect! {:jdbc-url            DB_JDBC_URL
                                       :username            DB_USERNAME
                                       :password            DB_PASSWORD
-                                      :connection-init-sql "SET search_path TO c_data;"})]
+                                      :connection-init-sql "SET search_path TO {{prefix}}_data;"})]
              (migratus/init (merge migratus-config {:db db}))
              (migratus/migrate (merge migratus-config {:db db}))
              db))
