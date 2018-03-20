@@ -3,7 +3,8 @@
   (:require [mount.lite :as m]
             [dovetail.core :as log]
             [cyrus-config.core :as cfg]
-            [mem-files.core :as mem-files]))
+            [mem-files.core :as mem-files]
+            [clojure.string :as str]))
 
 
 (cfg/def CREDENTIALS_DIR {:default "/meta/credentials"})
@@ -15,7 +16,7 @@
                                       :employee-client-id     (str CREDENTIALS_DIR "/" "employee-client-id")
                                       :employee-client-secret (str CREDENTIALS_DIR "/" "employee-client-secret")}]
                      (log/info "Starting Credential Refresher with interval %s ms." interval-ms)
-                     (mem-files/start interval-ms keys-files))
+                     (mem-files/start interval-ms keys-files str/trim))
             :stop (.close @refresher))
 
 
