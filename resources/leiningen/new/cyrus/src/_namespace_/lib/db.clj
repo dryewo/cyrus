@@ -3,11 +3,13 @@
             [clojure.java.jdbc :as jdbc]
             [camel-snake-kebab.core :as csk]
             [hugsql.adapter]
-            [hugsql.core])
+            [hugsql.core]
+            [conman.core :as conman])
   (:import org.postgresql.util.PGobject
            clojure.lang.IPersistentMap
            clojure.lang.IPersistentVector
            clojure.lang.LazySeq
+           clojure.lang.Symbol
            java.sql.Array
            java.sql.PreparedStatement))
 
@@ -110,3 +112,58 @@
   (-> (jdbc/query db ["SELECT pg_try_advisory_xact_lock(?);" lock-id])
       first
       :pg_try_advisory_xact_lock))
+
+
+(def *dbstate-sym)
+
+
+(defn set-db-state-sym! [dbstate-sym]
+  {:pre [(instance? Symbol dbstate-sym)]}
+  (alter-var-root #'*dbstate-sym (constantly dbstate-sym)))
+
+
+;; Before using any of the with-* functions below, set your database state symbol:
+;;   (set-db-state-sym! `*db*)
+
+
+(defmacro with-transaction [& body]
+  `(conman/with-transaction [~*dbstate-sym]
+     ~@body))
+
+
+(defmacro with-transaction* [opts & body]
+  `(conman/with-transaction [~*dbstate-sym ~opts]
+     ~@body))
+
+
+;; Keeps track of transactions per each lock. It is needed to ensure that locks are independent and reentrant.
+(def ^:dynamic *lock-txs* {})
+
+
+(defmacro with-lock-transaction [[txsym lock-id] & body]
+  `(if-let [lock-tx# (get *lock-txs* ~lock-id)]
+     (let [~txsym lock-tx#]
+       ~@body)
+     (jdbc/with-db-transaction [lock-tx# @~*dbstate-sym]
+       (binding [*lock-txs* (assoc *lock-txs* ~lock-id lock-tx#)]
+         (let [~txsym lock-tx#]
+           ~@body)))))
+
+
+(defmacro with-advisory-xact-lock
+  "Acquires transaction level lock in the DB. If the lock is taken, waits until it's available."
+  ;; TODO implement :timeout option, see clojure.java.jdbc/prepare-statement
+  ;; Could be something like (with-advisory-xact-lock {:lock-id 123 :timeout 5000} ...)
+  ;; Then check if first parameter is a map or not, or create with-advisory-xact-lock* that takes map only
+  [lock-id & body]
+  `(with-lock-transaction [tx# ~lock-id]
+     (pg-advisory-xact-lock tx# ~lock-id)
+     ~@body))
+
+
+(defmacro with-try-advisory-xact-lock
+  "Acquires transaction level lock in the DB and returns true. If the lock is taken, returns false immediately."
+  [lock-id & body]
+  `(with-lock-transaction [tx# ~lock-id]
+     (when (pg-try-advisory-xact-lock tx# ~lock-id)
+       ~@body)))

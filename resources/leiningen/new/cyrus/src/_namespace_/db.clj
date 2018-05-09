@@ -36,30 +36,7 @@
   :stop (conman/disconnect! @*db*))
 
 
-(defmacro with-transaction [& body]
-  `(conman/with-transaction [*db*]
-     ~@body))
-
-
-(defmacro with-transaction* [opts & body]
-  `(conman/with-transaction [*db* ~opts]
-     ~@body))
-
-
-(defmacro with-pg-advisory-xact-lock
-  "Acquires transaction level lock in the DB. If the lock is taken, waits until it's available."
-  [lock-id & body]
-  `(jdbc/with-db-transaction [tx# @*db*]
-     (dblib/pg-advisory-xact-lock tx# ~lock-id)
-     ~@body))
-
-
-(defmacro with-try-advisory-xact-lock
-  "Acquires transaction level lock in the DB and returns true. If the lock is taken, returns false immediately."
-  [lock-id & body]
-  `(jdbc/with-db-transaction [tx# @*db*]
-     (when (dblib/pg-try-advisory-xact-lock tx# ~lock-id)
-       ~@body)))
+(dblib/set-db-state-sym! `*db*)
 
 
 (conman/bind-connection-deref *db* "db/queries.sql")
@@ -73,7 +50,7 @@
   (delete-memory! {:id "1"})
 
   ;; Transaction example
-  (with-transaction
+  (dblib/with-transaction
     (jdbc/db-set-rollback-only! @*db*)
     (create-memory! {:id "2" :memory-text "foo"})
     (get-memory {:id "2"}))
