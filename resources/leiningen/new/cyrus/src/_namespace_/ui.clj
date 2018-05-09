@@ -2,7 +2,6 @@
   (:require [mount.lite :as m]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [dovetail.core :as log]
             [hiccup.core :as h]
             [ring.util.response :as r]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]

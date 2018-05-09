@@ -12,7 +12,6 @@ cd target
 
 export CYRUS_TEST=1
 
-export UI_ALLOW_ANON=true
 export TEST_TIMEOUT=1000
 export NREPL_ENABLED=true
 

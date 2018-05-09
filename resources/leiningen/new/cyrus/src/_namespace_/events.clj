@@ -2,8 +2,6 @@
   (:require [cyrus-config.core :as cfg]
             [mount.lite :as m]
             [dovetail.core :as log]
-            [clojure.string :as str]
-            [clojure.java.shell :as shell]
             [clj-nakadi-java.core :as nakadi]{{#credentials}}
             [{{namespace}}.credentials :as creds]{{/credentials}}))
 
