@@ -105,9 +105,7 @@
          ["test/{{nested-dirs}}/db_test.clj" (render "test/_namespace_/db_test.clj" data)]
          ["make.sh" (render "make.sh" data) :executable true]
          ["resources/db/queries.sql" (render "resources/db/queries.sql" data)]
-         ["resources/db/migrations/init.sql" (render "resources/db/migrations/init.sql" data)]
-         ["resources/db/migrations/19891109193400-add-memories-table.up.sql" (render "resources/db/migrations/19891109193400-add-memories-table.up.sql" data)]
-         ["resources/db/migrations/19891109193400-add-memories-table.down.sql" (render "resources/db/migrations/19891109193400-add-memories-table.down.sql" data)]]))))
+         ["resources/db/migration/V1__init.sql" (render "resources/db/migration/V1__init.sql" data)]]))))
 
 
 (def all-features #{"+all" "+http" "+db" "+nrepl" "+swagger1st" "+swagger1st-oauth2" "+ui" "+ui-oauth2"})

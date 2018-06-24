@@ -4,14 +4,16 @@
             [camel-snake-kebab.core :as csk]
             [hugsql.adapter]
             [hugsql.core]
-            [conman.core :as conman])
+            [conman.core :as conman]
+            [clojure.string :as str])
   (:import org.postgresql.util.PGobject
            clojure.lang.IPersistentMap
            clojure.lang.IPersistentVector
            clojure.lang.LazySeq
            clojure.lang.Symbol
            java.sql.Array
-           java.sql.PreparedStatement))
+           java.sql.PreparedStatement
+           java.util.Properties))
 
 
 ;; Conversion when getting from JDBC
@@ -98,6 +100,17 @@
 (defmethod hugsql.core/hugsql-result-fn :many [sym] '{{namespace}}.lib.db/result-many-snake->kebab)
 (defmethod hugsql.core/hugsql-result-fn :raw [sym] '{{namespace}}.lib.db/result-raw-snake->kebab)
 (defmethod hugsql.core/hugsql-result-fn :default [sym] '{{namespace}}.lib.db/result-raw-snake->kebab)
+
+
+(defn flyway-properties
+  "Creates a property list, including only keys that start with 'flyway', replacing '-' with '.' in them."
+  [configuration]
+  (let [properties (Properties.)]
+    (doseq [[k v] configuration]
+      (when (and (.startsWith (name k) "flyway")
+                 (some? v))
+        (.setProperty properties (str/replace (name k) "-" ".") v)))
+    properties))
 
 
 (defn pg-advisory-xact-lock

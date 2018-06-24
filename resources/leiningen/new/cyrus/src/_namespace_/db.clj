@@ -1,11 +1,11 @@
 (ns {{namespace}}.db
   (:require [conman.core :as conman]
             [mount.lite :as m]
-            [migratus.core :as migratus]
             [clojure.java.jdbc :as jdbc]
             [cyrus-config.core :as cfg]
             [dovetail.core :as log]
-            [{{namespace}}.lib.db :as dblib]))
+            [{{namespace}}.lib.db :as dblib])
+  (:import org.flywaydb.core.Flyway))
 
 
 (cfg/def DB_JDBC_URL "Coordinates of the database. Should start with `jdbc:postgresql://`."
@@ -16,24 +16,29 @@
                      {:secret true})
 
 
-(def migratus-config
-  {:store                :database
-   :init-script          "init.sql"
-   :init-in-transaction? true
-   :migration-dir        "db/migrations"})
+(def flyway-config
+  {:flyway-schemas "{{prefix}}_data"})
+
+
+(def conman-config
+  {:connection-init-sql "SET search_path TO {{prefix}}_data;"})
 
 
 (m/defstate ^:dynamic *db*
   :start (do
            (log/info "Starting DB connection pool.")
-           (let [db (conman/connect! {:jdbc-url            DB_JDBC_URL
-                                      :username            DB_USERNAME
-                                      :password            DB_PASSWORD
-                                      :connection-init-sql "SET search_path TO {{prefix}}_data;"})]
-             (migratus/init (merge migratus-config {:db db}))
-             (migratus/migrate (merge migratus-config {:db db}))
+           (doto (Flyway.)
+             (.configure (dblib/flyway-properties (merge flyway-config
+                                                         {:flyway-url      DB_JDBC_URL
+                                                          :flyway-user     DB_USERNAME
+                                                          :flyway-password DB_PASSWORD})))
+             (.migrate))
+           (let [db (conman/connect! (merge conman-config
+                                            {:jdbc-url DB_JDBC_URL
+                                             :username DB_USERNAME
+                                             :password DB_PASSWORD}))]
              db))
-  :stop (conman/disconnect! @*db*))
+  :stop (.close (:datasource @*db*)))
 
 
 (dblib/set-db-state-sym! `*db*)
@@ -55,7 +60,4 @@
     (create-memory! {:id "2" :memory-text "foo"})
     (get-memory {:id "2"}))
   (get-memory {:id "2"})
-
-  ;; Helper to create new migrations
-  (migratus/create migratus-config "create-user")
   )
