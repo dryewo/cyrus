@@ -5,9 +5,9 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [cyrus/dovetail "0.2.2"]
-                 [cheshire "5.8.0"]
+                 [cheshire "5.8.1"]
                  [functionalbytes/mount-lite "2.1.1"]
-                 [cyrus/config "0.2.2"]{{#nrepl}}
+                 [cyrus/config "0.3.0"]{{#nrepl}}
                  [org.clojure/tools.nrepl "0.2.13"]{{/nrepl}}{{#http}}
                  [aleph "0.4.6"]
                  [compojure "1.6.1"]
@@ -20,8 +20,8 @@
                  [conman "0.8.2"]
                  [org.postgresql/postgresql "42.2.5"]
                  [camel-snake-kebab "0.4.0"]
-                 [org.flywaydb/flyway-core "5.1.4"]{{/db}}{{#nakadi}}
-                 [me.dryewo/clj-nakadi-java "0.0.5"]{{/nakadi}}{{#ui}}
+                 [org.flywaydb/flyway-core "5.2.0"]{{/db}}{{#nakadi}}
+                 [me.dryewo/clj-nakadi-java "0.0.6"]{{/nakadi}}{{#ui}}
                  [hiccup "1.0.5"]{{/ui}}{{#ui-oauth2}}
                  [cyrus/ui-oauth2 "0.1.4"]{{/ui-oauth2}}{{#credentials}}
                  [me.dryewo/mem-files "0.1.1"]{{/credentials}}]
