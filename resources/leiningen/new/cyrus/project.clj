@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [cyrus/dovetail "0.2.2"]
+                 [cyrus/dovetail "0.3.0"]
                  [cheshire "5.8.1"]
                  [functionalbytes/mount-lite "2.1.1"]
                  [cyrus/config "0.3.0"]{{#nrepl}}
@@ -17,11 +17,11 @@
                  [clj-http "3.9.1"]{{/http}}{{#swagger1st}}
                  [org.zalando/swagger1st "0.25.0"]{{/swagger1st}}{{#swagger1st-oauth2}}
                  [fahrscheine-bitte "0.2.2"]{{/swagger1st-oauth2}}{{#db}}
-                 [conman "0.8.2"]
+                 [conman "0.8.3"]
                  [org.postgresql/postgresql "42.2.5"]
                  [camel-snake-kebab "0.4.0"]
-                 [org.flywaydb/flyway-core "5.2.0"]{{/db}}{{#nakadi}}
-                 [me.dryewo/clj-nakadi-java "0.0.6"]{{/nakadi}}{{#ui}}
+                 [org.flywaydb/flyway-core "5.2.1"]{{/db}}{{#nakadi}}
+                 [me.dryewo/clj-nakadi-java "0.0.7"]{{/nakadi}}{{#ui}}
                  [hiccup "1.0.5"]{{/ui}}{{#ui-oauth2}}
                  [cyrus/ui-oauth2 "0.1.4"]{{/ui-oauth2}}{{#credentials}}
                  [me.dryewo/mem-files "0.1.1"]{{/credentials}}]

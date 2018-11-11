@@ -21,4 +21,4 @@
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.9.0"]
                                   [org.clojure/tools.namespace "0.2.11"]
                                   [org.clojure/java.classpath "0.3.0"]
-                                  [midje "1.9.2"]]}})
+                                  [midje "1.9.4"]]}})
