@@ -18,7 +18,7 @@
                   ["vcs" "push"]]
   :vcs :git
   :dependencies [[clj-http "3.9.1"]]
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.9.0"]
+  :profiles {:dev {:dependencies [[org.clojure/clojure "1.10.0"]
                                   [org.clojure/tools.namespace "0.2.11"]
                                   [org.clojure/java.classpath "0.3.0"]
-                                  [midje "1.9.4"]]}})
+                                  [midje "1.9.6"]]}})

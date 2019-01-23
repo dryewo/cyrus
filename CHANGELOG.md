@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+### Changed
+- Use Clojure 1.10 in the generated projects.
+- Bump library versions in the generated projects.
 
 ## [0.22.3] — 2018-11-11
 ### Changed
