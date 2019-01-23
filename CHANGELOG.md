@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+
+## [0.22.4] — 2019-01-23
 ### Changed
 - Use Clojure 1.10 in the generated projects.
 - Bump library versions in the generated projects.
@@ -32,4 +34,5 @@ Released without _CHANGELOG.md_.
 [0.22.1]: https://github.com/dryewo/cyrus/compare/0.22.0...0.22.1
 [0.22.2]: https://github.com/dryewo/cyrus/compare/0.22.1...0.22.2
 [0.22.3]: https://github.com/dryewo/cyrus/compare/0.22.2...0.22.3
-[Unreleased]: https://github.com/dryewo/cyrus/compare/0.22.3...HEAD
+[0.22.4]: https://github.com/dryewo/cyrus/compare/0.22.3...0.22.4
+[Unreleased]: https://github.com/dryewo/cyrus/compare/0.22.4...HEAD
