@@ -3,4 +3,4 @@ services:
 - postgresql
 script: ./itest.sh
 addons:
-  postgresql: "10"
+  postgresql: "9.6"
